@@ -180,7 +180,7 @@ this.socketServer = new WebSocket.Server({server: hserver, perMessageDeflate: fa
         process.exit(1); // Exits the program
     });
 
-    function connectionEstablished(ws) {
+    function connectionEstablished(ws, request) {
         if (this.clients.length >= this.config.serverMaxConnections) { // Server full
             console.log("\u001B[33mClient tried to connect, but server player limit has been reached!\u001B[0m");
             ws.close();
@@ -191,8 +191,13 @@ this.socketServer = new WebSocket.Server({server: hserver, perMessageDeflate: fa
             return;
         }
 
-				var origin = ws.upgradeReq.headers.origin;
-	    if (this.config.serverMaxConnPerIp) {
+        // Fix for headers access - use the request parameter from WebSocket connection
+        var origin = '';
+        if (request && request.headers && request.headers.origin) {
+            origin = request.headers.origin;
+        }
+
+        if (this.config.serverMaxConnPerIp) {
             for (var cons = 1, i = 0, llen = this.clients.length; i < llen; i++) {
                 if (this.clients[i].remoteAddress == ws._socket.remoteAddress) {
                     cons++;
