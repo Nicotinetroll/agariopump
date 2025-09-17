@@ -28,6 +28,8 @@
             height: 10000vh !important;
             position: static !important;
             overscroll-behavior: none;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f2f2f7;
         }
     
         flutter-view {
@@ -36,69 +38,639 @@
             max-height: 100vh !important;
         }
         
-        /* Better colors for UI */
-        #helloDialog {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 20px;
+        /* iOS style overlay */
+        #overlays {
+            background: rgba(242, 242, 247, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
         
+        /* iOS style card */
+        #helloDialog {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 414px;
+            overflow: hidden;
+        }
+        
+        /* iOS style header section */
+        .form-group:first-child {
+            background: linear-gradient(to bottom, #ffffff, #f9f9fb);
+            padding: 35px 20px 25px 20px;
+            margin: 0;
+            text-align: center;
+            border-bottom: 0.5px solid rgba(60, 60, 67, 0.12);
+        }
+        
+        /* iOS style title */
         #title {
-            color: #667eea;
-            font-size: 2.5em;
+            font-weight: 700;
+            font-size: 34px;
+            letter-spacing: -0.4px;
+            color: #000000;
+            margin-bottom: 8px;
         }
         
         #motd {
-            color: #764ba2;
+            color: #8e8e93;
+            font-weight: 400;
+            font-size: 15px;
+            margin-bottom: 0;
+            letter-spacing: -0.2px;
         }
         
+        /* Content padding */
+        form {
+            padding: 0;
+        }
+        
+        /* iOS list group style */
+        .form-group:not(:first-child) {
+            padding: 0 16px;
+            margin-bottom: 35px;
+        }
+        
+        /* Prize info - iOS notification style */
         .prize-info {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            padding: 10px;
-            border-radius: 10px;
-            margin: 10px 0;
-            text-align: center;
-            font-weight: bold;
-            color: #000;
+            background: linear-gradient(135deg, #FFE5B4 0%, #FFD4A3 100%) !important;
+            padding: 14px 16px !important;
+            margin: 0 !important;
+            text-align: center !important;
+            font-weight: 600 !important;
+            color: #7A5200 !important;
+            border: none !important;
+            font-size: 14px;
+            border-radius: 0 !important;
+            border-top: 0.5px solid rgba(60, 60, 67, 0.12);
+            border-bottom: 0.5px solid rgba(60, 60, 67, 0.12);
+            letter-spacing: -0.2px;
         }
         
+        /* iOS style input */
+        #nick {
+            background: #f2f2f7 !important;
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 17px 16px !important;
+            color: #000000 !important;
+            font-size: 17px !important;
+            width: 100% !important;
+            transition: background-color 0.15s ease !important;
+            -webkit-appearance: none !important;
+            margin-top: 20px !important;
+            font-weight: 400;
+            letter-spacing: -0.4px;
+        }
+        
+        #nick:focus {
+            background: #e5e5ea !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        
+        #nick::placeholder {
+            color: #3c3c4399;
+            font-weight: 400;
+        }
+        
+        /* iOS style buttons container - SMALLER HEIGHT */
         .social-buttons {
-            margin: 10px 0;
-            text-align: center;
+            display: flex;
+            gap: 10px;
+            margin: 0 16px 20px 16px !important;
+            padding: 0 !important;
         }
         
-        .social-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 0 5px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: transform 0.2s;
+        .social-buttons a {
+            flex: 1;
+            border-radius: 12px !important;
+            padding: 10px 12px !important; /* Reduced height */
+            text-align: center !important;
+            font-weight: 500 !important;
+            text-decoration: none !important;
+            font-size: 15px !important; /* Slightly smaller font */
+            transition: opacity 0.15s !important;
+            display: block;
+            letter-spacing: -0.3px;
+            line-height: 1.2;
         }
         
-        .social-btn:hover {
-            transform: scale(1.05);
-            text-decoration: none;
+        .social-buttons a:active {
+            opacity: 0.6;
+            transform: scale(0.98);
         }
         
-        .twitter-btn {
-            background: #1DA1F2;
-            color: white !important;
+        /* Gray social buttons - iOS secondary button style */
+        .social-buttons a.btn-primary,
+        .social-buttons a.btn-warning {
+            background: #e5e5ea !important;
+            color: #000000 !important;
+            border: none !important;
+            box-shadow: none !important;
         }
         
-        .pumpfun-btn {
-            background: linear-gradient(135deg, #8B5CF6, #EC4899);
-            color: white !important;
+        .social-buttons a.btn-primary:hover,
+        .social-buttons a.btn-warning:hover {
+            background: #d1d1d6 !important;
         }
         
+        /* iOS button group */
+        .form-group:has(#play-btn) {
+            padding: 0 16px;
+            margin-bottom: 20px;
+        }
+        
+        /* Primary blue CTA button - iOS system blue */
         #play-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border: none;
+            background: #007aff !important;
+            color: white !important;
+            width: 75% !important;
+            font-size: 17px !important;
+            font-weight: 600 !important;
+            border-radius: 12px !important;
+            padding: 15px !important;
+            border: none !important;
+            box-shadow: none !important;
+            transition: all 0.15s !important;
+            letter-spacing: -0.4px;
         }
         
         #play-btn:hover {
-            background: linear-gradient(135deg, #764ba2, #667eea);
+            background: #0051d5 !important;
+        }
+        
+        #play-btn:active {
+            opacity: 0.7 !important;
+            transform: scale(0.98);
+        }
+        
+        #settings-btn {
+            background: #f2f2f7 !important;
+            color: #007aff !important;
+            width: 23% !important;
+            border-radius: 12px !important;
+            padding: 15px !important;
+            border: none !important;
+            box-shadow: none !important;
+            transition: all 0.15s !important;
+        }
+        
+        #settings-btn:hover {
+            background: #e5e5ea !important;
+        }
+        
+        #settings-btn:active {
+            opacity: 0.7 !important;
+            transform: scale(0.98);
+        }
+        
+        /* iOS Settings panel */
+        #settings, .settings-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 0;
+            margin: 0 16px 20px 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        
+        #settings #mainform {
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* iOS Toggle Switches */
+        .toggle-container {
+            padding: 6px;
+        }
+        
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-bottom: 0.5px solid rgba(60, 60, 67, 0.12);
+            min-height: 44px;
+        }
+        
+        .toggle-item:last-child {
+            border-bottom: none;
+        }
+        
+        .toggle-label {
+            font-size: 16px;
+            color: #000000;
+            letter-spacing: -0.3px;
+            flex: 1;
+        }
+        
+        /* iOS Toggle Switch */
+        .ios-toggle {
+            position: relative;
+            display: inline-block;
+            width: 51px;
+            height: 31px;
+            margin: 0;
+        }
+        
+        .ios-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e9e9eb;
+            transition: background-color 0.2s;
+            border-radius: 31px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 27px;
+            width: 27px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: transform 0.2s;
+            border-radius: 50%;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .ios-toggle input:checked + .toggle-slider {
+            background-color: #34c759;
+        }
+        
+        .ios-toggle input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        
+        .ios-toggle input:focus + .toggle-slider {
+            outline: none;
+        }
+        
+        /* Play button with icon */
+        #play-btn {
+            background: #007aff !important;
+            color: white !important;
+            width: 75% !important;
+            font-size: 17px !important;
+            font-weight: 600 !important;
+            border-radius: 12px !important;
+            padding: 15px !important;
+            border: none !important;
+            box-shadow: none !important;
+            transition: all 0.15s !important;
+            letter-spacing: -0.4px;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px;
+        }
+        
+        #play-btn i {
+            font-size: 18px;
+        }
+        
+        /* Spectate button with icon */
+        #spectate-btn {
+            background: #e5e5ea !important;
+            color: #000000 !important;
+            border: none !important;
+            font-weight: 500 !important;
+            font-size: 17px !important;
+            border-radius: 12px !important;
+            padding: 14px !important;
+            width: 100% !important;
+            transition: all 0.15s !important;
+            letter-spacing: -0.4px;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px;
+        }
+        
+        #spectate-btn i {
+            font-size: 16px;
+        }
+        
+        #spectate-btn:hover {
+            background: #d1d1d6 !important;
+        }
+        
+        #spectate-btn:active {
+            opacity: 0.7 !important;
+            transform: scale(0.98);
+        }
+        
+        /* iOS Toggle style checkboxes - FIXED ALIGNMENT */
+        .checkbox {
+            background: white;
+            border-radius: 12px;
+            margin: 12px;
+            padding: 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        
+        .checkbox label {
+            color: #000000;
+            font-weight: 400;
+            font-size: 16px;
+            padding: 14px 16px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 0.5px solid rgba(60, 60, 67, 0.12);
+            letter-spacing: -0.3px;
+            cursor: pointer;
+            transition: background-color 0.15s;
+            line-height: 1;
+            min-height: 48px;
+            white-space: nowrap;
+        }
+        
+        .checkbox label:hover {
+            background: #f9f9fb;
+        }
+        
+        .checkbox label:last-child {
+            border-bottom: none;
+        }
+        
+        .checkbox label span {
+            flex: 1;
+            padding-right: 15px;
+            display: block;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .checkbox input[type="checkbox"] {
+            accent-color: #34c759;
+            width: 20px;
+            height: 20px;
+            margin: 0;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        
+        /* Remove footer completely */
+        hr {
+            display: none !important;
+        }
+        
+        #footer {
+            display: none !important;
+        }
+        
+        /* iOS Chat - Improved design */
+        #chat_textbox {
+            background: rgba(255, 255, 255, 0.98) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8) !important;
+            border-radius: 22px !important;
+            color: #000000 !important;
+            padding: 12px 20px !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+            font-size: 16px;
+            letter-spacing: -0.3px;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 300px;
+            z-index: 100;
+        }
+        
+        #chat_textbox::placeholder {
+            color: #3c3c4399;
+        }
+        
+        #chat_textbox:focus {
+            outline: none !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+            border-color: rgba(0, 122, 255, 0.3) !important;
+        }
+        
+        /* Improved Canvas styling */
+        #canvas {
+            border-radius: 0;
+            box-shadow: none;
+            background: #ffffff;
+        }
+        
+        /* iOS style Leaderboard */
+        #leaderboard {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 14px;
+            padding: 12px;
+            min-width: 200px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+        }
+        
+        #leaderboard h4 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #000000;
+            letter-spacing: -0.3px;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+        
+        #leaderboard-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        #leaderboard-list li {
+            padding: 8px 0;
+            border-bottom: 0.5px solid rgba(60, 60, 67, 0.12);
+            font-size: 15px;
+            color: #000000;
+            display: flex;
+            align-items: center;
+            letter-spacing: -0.3px;
+        }
+        
+        #leaderboard-list li:last-child {
+            border-bottom: none;
+        }
+        
+        #leaderboard-list li:nth-child(1) {
+            color: #FFD700;
+            font-weight: 600;
+        }
+        
+        #leaderboard-list li:nth-child(2) {
+            color: #C0C0C0;
+            font-weight: 500;
+        }
+        
+        #leaderboard-list li:nth-child(3) {
+            color: #CD7F32;
+            font-weight: 500;
+        }
+        
+        /* Score display */
+        #score {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 14px;
+            padding: 12px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+            letter-spacing: -0.3px;
+        }
+        
+        /* FPS counter */
+        #fps {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #34c759;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        
+        /* Mini-map */
+        #minimap {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* iOS Modal */
+        .modal-content {
+            background: #ffffff !important;
+            border: none !important;
+            border-radius: 14px !important;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
+        }
+        
+        .modal-header {
+            border-bottom: 0.5px solid rgba(60, 60, 67, 0.12) !important;
+            background: #f9f9fb;
+            padding: 16px 20px;
+        }
+        
+        .modal-title {
+            color: #000000;
+            font-weight: 600;
+            font-size: 17px;
+            text-align: center;
+            letter-spacing: -0.4px;
+        }
+        
+        .modal-body {
+            color: #000000;
+            padding: 20px;
+            font-size: 17px;
+            line-height: 1.4;
+            letter-spacing: -0.4px;
+        }
+        
+        .modal-footer {
+            border-top: 0.5px solid rgba(60, 60, 67, 0.12) !important;
+            background: #f9f9fb;
+            padding: 0;
+            display: flex;
+        }
+        
+        .modal-footer .btn {
+            flex: 1;
+            border-radius: 0 !important;
+            border-right: 0.5px solid rgba(60, 60, 67, 0.12) !important;
+            background: transparent !important;
+            color: #007aff !important;
+            font-size: 17px !important;
+            font-weight: 400 !important;
+            padding: 16px !important;
+            letter-spacing: -0.4px;
+        }
+        
+        .modal-footer .btn:last-child {
+            border-right: none !important;
+            font-weight: 600 !important;
+        }
+        
+        .modal-footer .btn:hover {
+            background: #f2f2f7 !important;
+        }
+        
+        .close {
+            color: #8e8e93 !important;
+            opacity: 1 !important;
+            font-size: 28px;
+            font-weight: 300;
+            line-height: 0.7;
+        }
+        
+        /* Connecting screen */
+        #connecting > div {
+            background: #ffffff !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+            border: none !important;
+            border-radius: 14px !important;
+            padding: 32px !important;
+        }
+        
+        #connecting h2 {
+            color: #000000;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: -0.4px;
+        }
+        
+        #connecting p {
+            color: #8e8e93;
+            font-size: 15px;
+            letter-spacing: -0.2px;
+        }
+        
+        /* Remove bootstrap button styles */
+        .btn:hover, .btn:focus, .btn:active, .btn:active:focus {
+            box-shadow: none !important;
+            outline: none !important;
         }
         
         /* Safari-specific CSS */
@@ -106,6 +678,49 @@
             body {
                 height: 1vh !important;
             }
+            
+            #helloDialog {
+                -webkit-transform: translateZ(0);
+            }
+        }
+        
+        /* Smooth animations */
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* iOS bounce effect for buttons */
+        @keyframes buttonTap {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Game stats panel */
+        .game-stats {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 14px;
+            padding: 8px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #000000;
+            letter-spacing: -0.3px;
+        }
+        
+        .game-stats span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
     </style>
 </head>
@@ -151,17 +766,19 @@
                 </div>
 
                 <div class="social-buttons">
-                    <a href="https://x.com/PlayAgario_Fun" target="_blank" class="social-btn twitter-btn">
+                    <a href="https://x.com/PlayAgario_Fun" target="_blank" class="btn btn-primary">
                         Twitter/X
                     </a>
-                    <a href="https://pump.fun/coin/DbBqQVx3sSkrzM6LXDBH4Nto2BS6eFqcKeheyvC6pump" target="_blank" class="social-btn pumpfun-btn">
+                    <a href="https://pump.fun/coin/DbBqQVx3sSkrzM6LXDBH4Nto2BS6eFqcKeheyvC6pump" target="_blank" class="btn btn-warning">
                         Pump.fun
                     </a>
                 </div>
 
                 <div class="form-group">
                     <button type="submit" id="play-btn" onclick="setNick(document.getElementById('nick').value); return false;" 
-                            class="btn btn-play btn-primary btn-needs-server">Play</button>
+                            class="btn btn-play btn-primary btn-needs-server">
+                        <i class="glyphicon glyphicon-play-circle"></i> Play
+                    </button>
                     <button onclick="$('#settings, #instructions').toggle(); return false;" 
                             class="btn btn-info btn-settings" id="settings-btn">
                         <i class="glyphicon glyphicon-cog"></i>
@@ -169,31 +786,60 @@
                     <br clear="both" />
                 </div>
 
-                <div id="settings" class="checkbox" style="display:none;">
-                    <div class="form-group" id="mainform">
-                        <button id="spectate-btn" onclick="spectate(); return false;" 
-                                style="width: 100%" class="btn btn-warning btn-spectate btn-needs-server">
-                            Spectate
-                        </button>
-                        <br clear="both" />
-                    </div>
-                    <div style="margin: 6px;">
-                        <label><input type="checkbox" class="save" data-box-id="1" onchange="setSkins(!$(this).is(':checked'));"> No skins</label>
-                        <label><input type="checkbox" class="save" data-box-id="2" onchange="setNames(!$(this).is(':checked'));"> No names</label>
-                        <label><input type="checkbox" class="save" data-box-id="3" onchange="setDarkTheme($(this).is(':checked'));"> Dark Theme</label>
-                        <label><input type="checkbox" class="save" data-box-id="4" onchange="setColors($(this).is(':checked'));"> No colors</label>
-                        <label><input type="checkbox" class="save" data-box-id="5" onchange="setShowMass($(this).is(':checked'));"> Show mass</label>
-                        <label><input type="checkbox" class="save" data-box-id="6" onchange="setSmooth($(this).is(':checked'));"> Smooth Render</label>
-                        <label><input type="checkbox" class="save" data-box-id="7" onchange="setChatHide($(this).is(':checked'));"> Hide Chat</label>
+                <div class="form-group" style="padding-top: 0; margin-top: -5px; margin-bottom: 20px;">
+                    <button id="spectate-btn" onclick="spectate(); return false;" 
+                            style="width: 100%" class="btn btn-spectate btn-needs-server">
+                        <i class="glyphicon glyphicon-eye-open"></i> Spectate
+                    </button>
+                </div>
+
+                <div id="settings" class="settings-panel" style="display:none;">
+                    <div class="toggle-container">
+                        <div class="toggle-item">
+                            <span class="toggle-label">Skins</span>
+                            <label class="ios-toggle">
+                                <input type="checkbox" checked class="save" data-box-id="1" onchange="setSkins($(this).is(':checked'));">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-item">
+                            <span class="toggle-label">Names</span>
+                            <label class="ios-toggle">
+                                <input type="checkbox" checked class="save" data-box-id="2" onchange="setNames($(this).is(':checked'));">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-item">
+                            <span class="toggle-label">Colors</span>
+                            <label class="ios-toggle">
+                                <input type="checkbox" checked class="save" data-box-id="4" onchange="setColors(!$(this).is(':checked'));">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-item">
+                            <span class="toggle-label">Show mass</span>
+                            <label class="ios-toggle">
+                                <input type="checkbox" class="save" data-box-id="5" onchange="setShowMass($(this).is(':checked'));">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-item">
+                            <span class="toggle-label">Smooth Render</span>
+                            <label class="ios-toggle">
+                                <input type="checkbox" class="save" data-box-id="6" onchange="setSmooth($(this).is(':checked'));">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-item">
+                            <span class="toggle-label">Hide Chat</span>
+                            <label class="ios-toggle">
+                                <input type="checkbox" class="save" data-box-id="7" onchange="setChatHide($(this).is(':checked'));">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </form>
-
-            <hr />
-            <div id="footer">
-                <a href="https://x.com/PlayAgario_Fun" class="text-muted">Twitter/X</a> | 
-                <a href="https://pump.fun/coin/DbBqQVx3sSkrzM6LXDBH4Nto2BS6eFqcKeheyvC6pump" class="text-muted">Pump.fun</a>
-            </div>
         </div>
     </div>
 
