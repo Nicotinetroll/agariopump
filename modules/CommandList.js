@@ -121,6 +121,38 @@ Commands.list = {
             console.log(gameServer.banned[i]);
         }
     },
+    kickbots: function(gameServer, split) {
+    var count = parseInt(split[1]) || 1;
+    var kicked = 0;
+    
+    // Prejdi všetkých klientov odzadu
+    for (var i = gameServer.clients.length - 1; i >= 0 && kicked < count; i--) {
+        var client = gameServer.clients[i];
+        
+        // Skontroluj či je to bot (nemá _socket property)
+        if (client && !('_socket' in client)) {
+            // Odstráň bota
+            var bot = client.playerTracker;
+            if (bot.cells.length > 0) {
+                for (var j = 0; j < bot.cells.length; j++) {
+                    gameServer.removeNode(bot.cells[j]);
+                }
+            }
+            
+            // Odstráň z klientov
+            gameServer.clients.splice(i, 1);
+            kicked++;
+        }
+    }
+    
+    console.log("\u001B[36mServer: \u001B[0mKicked " + kicked + " bots");
+    
+    // Nastav nový limit
+    if (split[2]) {
+        gameServer.config.serverBots = Math.max(0, gameServer.config.serverBots - kicked);
+        console.log("\u001B[36mServer: \u001B[0mNew bot limit: " + gameServer.config.serverBots);
+    }
+},
     board: function(gameServer,split) {
         var newLB = [];
         for (var i = 1; i < split.length; i++) {
