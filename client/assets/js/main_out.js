@@ -363,7 +363,7 @@
         sendNickName();
         STATS = JSON.parse(httpGet((useHttps ? "https://" : "http://") + location.host + '/api/stats.txt'));
         document.getElementById("title").innerHTML = STATS.title;
-        document.title = STATS.title
+        // Title update disabled
         log.info("Connection successful!")
     }
 

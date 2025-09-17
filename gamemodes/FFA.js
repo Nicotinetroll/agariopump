@@ -8,7 +8,7 @@ function FFA() {
     this.specByLeaderboard = true;
     
     // Round-based system
-    this.roundDuration = 1200; // 1 minute for testing (60 seconds * 20 ticks per second)
+    this.roundDuration = 12000; // 1 minute for testing (60 seconds * 20 ticks per second)
     this.roundTimer = this.roundDuration;
     this.roundActive = false;
     this.roundNumber = 1;
