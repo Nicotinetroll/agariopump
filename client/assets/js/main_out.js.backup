@@ -1,36 +1,8 @@
-function Vector2(x, y) {
-    this.x = x || 0;
-    this.y = y || 0;
-}
-
-Vector2.prototype.reset = function(x, y) {
-    this.x = x;
-    this.y = y;
-    return this;
-};
-
-Vector2.prototype.copyFrom = function(other) {
-    this.x = other.x;
-    this.y = other.y;
-    return this;
-};
-
-Vector2.prototype.minusEq = function(other) {
-    this.x -= other.x;
-    this.y -= other.y;
-    return this;
-};
-
-var log = {
-    info: function(msg) {
-    }
-};
-
 (function(wHandle, wjQuery) {
     ONLY_CLIENT = false;
-    var CONNECTION_URL = location.host,
-        SKIN_URL = "./skins/",
-        STATS = "";
+    var CONNECTION_URL = location.host
+        SKIN_URL = "./skins/", // Skin Directory
+        STATS = ""
 
     wHandle.setserver = function(arg) {
         if (arg != CONNECTION_URL) {
@@ -52,11 +24,11 @@ var log = {
 
     function gameLoop() {
         ma = true;
+        document.getElementById("canvas").focus();
         var isTyping = false;
-        nCanvas = document.getElementById("canvas");
-        mainCanvas = nCanvas;
-        ctx = nCanvas.getContext("2d");
-        mainCanvas.focus();
+        var chattxt;
+        mainCanvas = nCanvas = document.getElementById("canvas");
+        ctx = mainCanvas.getContext("2d");
 
         mainCanvas.onmousemove = function(event) {
             rawMouseX = event.clientX;
@@ -81,6 +53,11 @@ var log = {
             isTyping = false;
         };
 
+if (window.canvas) window.if(window.canvas) window.canvas.onblur = function() {};
+            isTyping = false;
+        };
+
+
         document.getElementById("chat_textbox").onfocus = function() {
             isTyping = true;
         };
@@ -94,7 +71,7 @@ var log = {
             wPressed = false;
         wHandle.onkeydown = function(event) {
             switch (event.keyCode) {
-                case 13:
+                case 13: // enter
                     if (isTyping || hideChat) {
                         isTyping = false;
                         document.getElementById("chat_textbox").blur();
@@ -108,68 +85,67 @@ var log = {
                         }
                     }
                     break;
-                case 32:
+                case 32: // space
                     if ((!spacePressed) && (!isTyping)) {
                         sendMouseMove();
                         sendUint8(17);
                         spacePressed = true;
                     }
                     break;
-                case 87:
+                case 87: // W
                     if ((!wPressed) && (!isTyping)) {
                         sendMouseMove();
                         sendUint8(21);
                         wPressed = true;
                     }
                     break;
-                case 81:
+                case 81: // Q
                     if ((!qPressed) && (!isTyping)) {
                         sendUint8(18);
                         qPressed = true;
                     }
                     break;
-                case 69:
+                case 69: // E
                     if (!ePressed && (!isTyping)) {
                         sendMouseMove();
                         sendUint8(22);
-                        ePressed = true;
                     }
                     break;
-                case 82:
+                case 82: // R
                     if (!rPressed && (!isTyping)) {
                         sendMouseMove();
                         sendUint8(23);
-                        rPressed = true;
+                        if (!rMacro) rPressed = true;
                     }
                     break;
-                case 84:
+                case 84: // T
                     if (!tPressed && (!isTyping)) {
                         sendMouseMove();
                         sendUint8(24);
                         tPressed = true;
                     }
                     break;
-                case 80:
+                case 80: // P
                     if (!pPressed && (!isTyping)) {
                         sendMouseMove();
                         sendUint8(25);
                         pPressed = true;
                     }
                     break;
-                case 27:
+                case 27: // esc
                     showOverlays(true);
                     break;
             }
         };
         wHandle.onkeyup = function(event) {
             switch (event.keyCode) {
-                case 32:
+                case 32: // space
                     spacePressed = false;
                     break;
-                case 87:
+                case 87: // W
                     wPressed = false;
                     break;
-                case 81:
+                case 81: // Q
                     if (qPressed) {
                         sendUint8(19);
                         qPressed = false;
@@ -204,6 +180,7 @@ var log = {
         setInterval(sendMouseMove, 40);
 
         null == ws && showConnecting();
+        wjQuery("#overlays").show();
     }
 
     function onTouchStart(e) {
@@ -215,14 +192,16 @@ var log = {
                 leftTouchPos.copyFrom(leftTouchStartPos);
                 leftVector.reset(0, 0);
             }
+
             var size = ~~(canvasWidth / 7);
             if ((touch.clientX > canvasWidth - size) && (touch.clientY > canvasHeight - size)) {
                 sendMouseMove();
-                sendUint8(17);
+                sendUint8(17); // split
             }
+
             if ((touch.clientX > canvasWidth - size) && (touch.clientY > canvasHeight - 2 * size - 10) && (touch.clientY < canvasHeight - size - 10)) {
                 sendMouseMove();
-                sendUint8(21);
+                sendUint8(21); // eject
             }
         }
         touches = e.touches;
@@ -345,6 +324,7 @@ var log = {
         leaderBoard = [];
         mainCanvas = teamScores = null;
         userScore = 0;
+        log.info("Connecting to " + wsUrl + "..");
         ws = new WebSocket(wsUrl);
         ws.binaryType = "arraybuffer";
         ws.onopen = onWsOpen;
@@ -361,11 +341,12 @@ var log = {
     }
 
     function httpGet(theUrl) {
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", theUrl, false);
-        xmlHttp.send(null);
-        return xmlHttp.responseText;
-    }
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+
 
     function onWsOpen() {
         var msg;
@@ -373,7 +354,7 @@ var log = {
         wjQuery("#connecting").hide();
         msg = prepareData(5);
         msg.setUint8(0, 254);
-        msg.setUint32(1, 5, true);
+        msg.setUint32(1, 5, true); // Protocol 5
         wsSend(msg);
         msg = prepareData(5);
         msg.setUint8(0, 255);
@@ -382,6 +363,8 @@ var log = {
         sendNickName();
         STATS = JSON.parse(httpGet((useHttps ? "https://" : "http://") + location.host + '/api/stats.txt'));
         document.getElementById("title").innerHTML = STATS.title;
+        // Title update disabled
+        log.info("Connection successful!")
     }
 
     function onWsClose() {
@@ -409,10 +392,10 @@ var log = {
             setCustomLB = false;
         240 == msg.getUint8(offset) && (offset += 5);
         switch (msg.getUint8(offset++)) {
-            case 16:
+            case 16: // update nodes
                 updateNodes(msg, offset);
                 break;
-            case 17:
+            case 17: // update position
                 posX = msg.getFloat32(offset, true);
                 offset += 4;
                 posY = msg.getFloat32(offset, true);
@@ -420,11 +403,11 @@ var log = {
                 posSize = msg.getFloat32(offset, true);
                 offset += 4;
                 break;
-            case 20:
+            case 20: // clear nodes
                 playerCells = [];
                 nodesOnScreen = [];
                 break;
-            case 21:
+            case 21: // draw line
                 lineX = msg.getInt16(offset, true);
                 offset += 2;
                 lineY = msg.getInt16(offset, true);
@@ -435,15 +418,15 @@ var log = {
                     drawLineY = lineY;
                 }
                 break;
-            case 32:
+            case 32: // add node
                 nodesOnScreen.push(msg.getUint32(offset, true));
                 offset += 4;
                 break;
-            case 48:
+            case 48: // update leaderboard (custom text)
                 setCustomLB = true;
                 noRanking = true;
                 break;
-            case 49:
+            case 49: // update leaderboard (ffa)
                 if (!setCustomLB) {
                     noRanking = false;
                 }
@@ -461,7 +444,7 @@ var log = {
                 }
                 drawLeaderBoard();
                 break;
-            case 50:
+            case 50: // update leaderboard (teams)
                 teamScores = [];
                 var LBteamNum = msg.getUint32(offset, true);
                 offset += 4;
@@ -471,7 +454,7 @@ var log = {
                 }
                 drawLeaderBoard();
                 break;
-            case 64:
+            case 64: // set border
                 leftPos = msg.getFloat64(offset, true);
                 offset += 8;
                 topPos = msg.getFloat64(offset, true);
@@ -489,55 +472,85 @@ var log = {
                     viewZoom = posSize;
                 }
                 break;
-            case 99:
-                var flags = msg.getUint8(offset);
-                offset += 1;
-                if (flags & 2) { offset += 4; }
-                if (flags & 4) { offset += 8; }
-                if (flags & 8) { offset += 16; }
-                var message = "";
-                while (offset < msg.byteLength) {
-                    var charCode = msg.getUint16(offset, true);
-                    offset += 2;
-                    if (charCode == 0) break;
-                    message += String.fromCharCode(charCode);
-                }
-                if (message.indexOf("TIME:") === 0) {
-                    var parts = message.split(":");
-                    var phase = parseInt(parts[1]);
-                    var timeLeft = parseInt(parts[2]);
-                    var roundNum = parseInt(parts[3]);
-                    var winner = parts[4] || "";
+        case 99: // Chat message
+            var flags = view.getUint8(offset);
+            offset += 1;
+            if (flags & 2) { offset += 4; }
+            if (flags & 4) { offset += 8; }
+            if (flags & 8) { offset += 16; }
+            var msg = "";
+            while (offset < view.byteLength) {
+                var charCode = view.getUint16(offset, true);
+                offset += 2;
+                if (charCode == 0) break;
+                msg += String.fromCharCode(charCode);
+            }
+                console.log("Chat message received:", msg);
+            if (msg.indexOf("TIME:") === 0) {
+                // UPDATE TIMER
+                var parts = msg.split(":");
+                var phase = parseInt(parts[1]);
+                var timeLeft = parseInt(parts[2]);
+                var roundNum = parseInt(parts[3]);
+                
+                var timerText = document.getElementById("timerText");
+                var roundNumber = document.getElementById("roundNumber");
+                
+                if (timerText && roundNumber) {
+                    roundNumber.textContent = roundNum;
                     
-                    var timer = document.getElementById("roundTimer");
-                    var timerText = document.getElementById("timerText");
-                    var roundNumber = document.getElementById("roundNumber");
-                    
-                    if (timer && timerText && roundNumber) {
-                        timer.style.display = "block";
-                        roundNumber.textContent = roundNum;
-                        
-                        switch(phase) {
-                            case 0:
-                                timerText.textContent = "Starting in " + timeLeft + "s";
-                                break;
-                            case 1:
-                                var minutes = Math.floor(timeLeft / 60);
-                                var seconds = timeLeft % 60;
-                                timerText.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-                                break;
-                            case 2:
-                                timerText.textContent = "Intermission: " + timeLeft + "s";
-                                break;
-                        }
+                    if (phase === 0) {
+                        timerText.textContent = "Starting in " + timeLeft + "s";
+                    } else if (phase === 1) {
+                        var m = Math.floor(timeLeft / 60);
+                        var s = timeLeft % 60;
+                        timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+                    } else if (phase === 2) {
+                        timerText.textContent = "Intermission: " + timeLeft + "s";
                     }
+                }
+                var parts = msg.split(":");
+                var phase = parseInt(parts[1]);
+                var timeLeft = parseInt(parts[2]);
+                var roundNum = parseInt(parts[3]);
+                var winner = parts[4] || "";
+                
+                // Update timer display
+                var timer = document.getElementById("roundTimer");
+                var timerText = document.getElementById("timerText");
+                var roundNumber = document.getElementById("roundNumber");
+                
+                if (timer && timerText && roundNumber) {
+                    timer.style.display = "block";
+                    roundNumber.textContent = roundNum;
                     
-                    return;
+                    switch(phase) {
+                        case 0:
+                            timerText.textContent = "Starting in " + timeLeft + "s";
+                            break;
+                        case 1:
+                            var minutes = Math.floor(timeLeft / 60);
+                            var seconds = timeLeft % 60;
+                            timerText.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+                            break;
+                        case 2:
+                            timerText.textContent = "Intermission: " + timeLeft + "s";
+                            break;
+                    }
                 }
-                if (window.chat) {
-                    window.chat.addMessage(message);
+                
+                return; // Nezobrazuj TIME: správy v chate
+            }
+                            break;
+                    }
                 }
-                break;
+                return; // Nezobrazuj TIME: správy v chate
+            }
+            // Normálny chat
+            if (window.chat) {
+                window.chat.addMessage(msg);
+            }
+            break;
         }
     }
 
@@ -556,12 +569,15 @@ var log = {
         var flags = view.getUint8(offset++);
         
         if (flags & 0x80) {
+            // SERVER Message
         }
 
         if (flags & 0x40) {
+            // ADMIN Message
         }
 
         if (flags & 0x20) {
+            // MOD Message
         }
 
         var r = view.getUint8(offset++),
@@ -582,13 +598,13 @@ var log = {
     }
 
     function drawChatBoard() {
-        if (hideChat) {
+        if (hideChat)  {
             chatCanvas = null;
             return;
         }
         chatCanvas = document.createElement("canvas");
         var ctx = chatCanvas.getContext("2d");
-        var scaleFactor = Math.min(Math.max(canvasWidth / 1200, 0.75), 1);
+        var scaleFactor = Math.min(Math.max(canvasWidth / 1200, 0.75), 1); //scale factor = 0.75 to 1
         chatCanvas.width = 1E3 * scaleFactor;
         chatCanvas.height = 550 * scaleFactor;
         ctx.scale(scaleFactor, scaleFactor);
@@ -616,6 +632,7 @@ var log = {
             ctx.drawImage(a, 15 + width * 1.8, chatCanvas.height / scaleFactor - 24 * (len - from - i));
         }
     }
+
 
     function updateNodes(view, offset) {
         timestamp = +new Date;
@@ -665,7 +682,7 @@ var log = {
             flags & 2 && (offset += 4);
 
             if (flags & 4) {
-                for (;;) {
+                for (;;) { // skin name
                     t = view.getUint8(offset, true) & 0x7F;
                     offset += 1;
                     if (0 == t) break;
@@ -673,7 +690,7 @@ var log = {
                 }
             }
 
-            for (var char, name = "";;) {
+            for (var char, name = "";;) { // nick name
                 char = view.getUint16(offset, true);
                 offset += 2;
                 if (0 == char) break;
@@ -757,7 +774,7 @@ var log = {
             var msg = prepareData(2 + 2 * str.length);
             var offset = 0;
             msg.setUint8(offset++, 99);
-            msg.setUint8(offset++, 0);
+            msg.setUint8(offset++, 0); // flags (0 for now)
             for (var i = 0; i < str.length; ++i) {
                 msg.setUint16(offset, str.charCodeAt(i), true);
                 offset += 2;
@@ -876,8 +893,8 @@ var log = {
             ctx.restore()
         }
         ctx.restore();
-        lbCanvas && lbCanvas.width && ctx.drawImage(lbCanvas, canvasWidth - lbCanvas.width - 10, 10);
-        if (chatCanvas != null) ctx.drawImage(chatCanvas, 0, canvasHeight - chatCanvas.height - 50);
+        lbCanvas && lbCanvas.width && ctx.drawImage(lbCanvas, canvasWidth - lbCanvas.width - 10, 10); // draw Leader Board
+        if (chatCanvas != null) ctx.drawImage(chatCanvas, 0, canvasHeight - chatCanvas.height - 50); // draw Leader Board
 
         userScore = Math.max(userScore, calcUserScore());
         if (0 != userScore) {
@@ -889,13 +906,14 @@ var log = {
             a = c.width;
             ctx.globalAlpha = .2;
             ctx.fillStyle = '#000000';
-            ctx.fillRect(10, 10, a + 10, 34);
+            ctx.fillRect(10, 10, a + 10, 34); //canvasHeight - 10 - 24 - 10
             ctx.globalAlpha = 1;
-            ctx.drawImage(c, 15, 15);
+            ctx.drawImage(c, 15, 15); //canvasHeight - 10 - 24 - 5
         }
         drawSplitIcon(ctx);
 
         drawTouch(ctx);
+        //drawChatBoard();
         var deltatime = Date.now() - oldtime;
         deltatime > 1E3 / 60 ? z -= .01 : deltatime < 1E3 / 65 && (z += .01);
         .4 > z && (z = .4);
@@ -1046,6 +1064,7 @@ var log = {
         ustrokecolor && (this._strokeColor = ustrokecolor)
     }
 
+
     var localProtocol = wHandle.location.protocol,
         localProtocolHttps = "https:" == localProtocol;
     var nCanvas, ctx, mainCanvas, lbCanvas, chatCanvas, canvasWidth, canvasHeight, qTree = null,
@@ -1188,11 +1207,12 @@ var log = {
     };
     fetch('skinList.txt').then(resp => resp.text()).then(data => {
         const skins = data.split(',').filter(name => name.length > 0);
+		console.log(skins);
         for (var i = 0; i < skins.length; i++) {
-            if (-1 == knownNameDict.indexOf(skins[i])) {
-                knownNameDict.push(skins[i]);
-            }
-        }
+                if (-1 == knownNameDict.indexOf(skins[i])) {
+                    knownNameDict.push(skins[i]);
+                }
+		}
     });
 
     var delay = 500,
@@ -1390,7 +1410,7 @@ var log = {
                 if (this.wasSimpleDrawing && !b)
                     for (var c = 0; c < this.points.length; c++) this.points[c].size = this.size;
                 var bigPointSize = this.size;
-                if (!this.wasSimpleDrawing) {
+                if(!this.wasSimpleDrawing) {
                     for (var c = 0; c < this.points.length; c++) bigPointSize = Math.max(this.points[c].size, bigPointSize);
                 }
                 this.wasSimpleDrawing = b;
@@ -1409,11 +1429,12 @@ var log = {
                     if (b) ctx.strokeStyle = this.getStrokeColor();
                     else ctx.strokeStyle = this.color;
                 }
-                ctx.beginPath();
+				ctx.beginPath();
                 if (b) {
                     var lw = this.size * 0.03;
                     ctx.lineWidth = lw;
                     ctx.arc(this.x, this.y, this.size - lw * 0.5 + 5, 0, 2 * Math.PI, false);
+                    //ctx.stroke();
                 } else {
                     this.movePoints();
                     ctx.beginPath();
@@ -1421,12 +1442,13 @@ var log = {
                     ctx.moveTo(this.points[0].x, this.points[0].y);
                     for (c = 1; c <= d; ++c) {
                         var e = c % d;
-                        ctx.lineTo(this.points[e].x, this.points[e].y);
+                        ctx.lineTo(this.points[e].x, this.points[e].y); //Draw circle of cell
                     }
                 }
                 ctx.closePath();
                 var skinName = this.name.toLowerCase();
 
+                // Load Premium skin if we have one set
                 if (typeof this._skin != 'undefined' && this._skin != '') {
                     if (this._skin[0] == '%') {
                         skinName = this._skin.substring(1);
@@ -1437,7 +1459,7 @@ var log = {
                     if (!skins.hasOwnProperty(skinName)) {
                         skins[skinName] = new Image;
                         skins[skinName].src = SKIN_URL + skinName + '.png';
-                    } else if (skinName.startsWith("i/")) {
+                    } else if(skinName.startsWith("i/")) {
                         skins[skinName] = new Image;
                         skins[skinName].src = "https://i.imgur.com/" + this.name.split("i/")[1] + '.png';
                     }
@@ -1450,10 +1472,11 @@ var log = {
                     c = null;
                 }
                 b || ctx.stroke();
-                ctx.fill();
+                ctx.fill(); //Draw cell content
                 if (c) {
                     ctx.save();
                     ctx.clip();
+                    //Draw skin
                     ctx.drawImage(c, this.x - bigPointSize, this.y - bigPointSize, 2 * bigPointSize, 2 * bigPointSize);
                     ctx.restore();
                 }
@@ -1462,9 +1485,10 @@ var log = {
                     ctx.globalAlpha *= .1;
                     ctx.stroke();
                 }
-                ctx.globalAlpha = 1;
+                ctx.globalAlpha = 1; 
                 c = -1 != playerCells.indexOf(this);
                 var ncache;
+                //draw name
                 if (0 != this.id) {
                     var x = ~~this.x,
                         y = ~~this.y,
@@ -1483,6 +1507,7 @@ var log = {
                         b += rnchache.height * 0.5 * ratio + 4;
                     }
 
+                    //draw mass
                     if (showMass && (c || 0 == playerCells.length && (!this.isVirus || this.isAgitated) && 20 < this.size)) {
                         var m = ~~(this.size * this.size * 0.01);
                         c = this.sizeCache;
@@ -1705,15 +1730,287 @@ var log = {
         var ctx = favCanvas.getContext("2d");
         renderFavicon();
 
+        // Causes stuttering..
+        //setInterval(renderFavicon, 1E3);
+
         setInterval(drawChatBoard, 1E3);
     });
-    wHandle.onload = function() {
-        gameLoop();
-        wjQuery("#overlays").show();
-        setTimeout(function() {
-            if (!userNickName) {
-                wjQuery("#overlays").show();
-            }
-        }, 500);
-    }
+    wHandle.onload = gameLoop
 })(window, window.jQuery);
+
+// Round Timer Handler
+window.handleRoundTimer = function(message) {
+    if (message.indexOf("TIME:") === 0) {
+        var parts = message.split(":");
+        var phase = parseInt(parts[1]);
+        var timeLeft = parseInt(parts[2]);
+        var roundNum = parseInt(parts[3]);
+        var winner = parts[4] || "";
+        
+        var timer = document.getElementById('roundTimer');
+        var timerText = document.getElementById('timerText');
+        var roundNumber = document.getElementById('roundNumber');
+        var winnerDisplay = document.getElementById('winnerDisplay');
+        
+        timer.classList.add('active');
+        roundNumber.textContent = roundNum;
+        timer.classList.remove('countdown', 'active-round', 'intermission', 'warning');
+        
+        switch(phase) {
+            case 0:
+                timer.classList.add('countdown');
+                timerText.textContent = 'Starting in ' + timeLeft + 's';
+                winnerDisplay.style.display = 'none';
+                break;
+            case 1:
+                timer.classList.add('active-round');
+                var minutes = Math.floor(timeLeft / 60);
+                var seconds = timeLeft % 60;
+                timerText.textContent = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+                if (timeLeft <= 10) timer.classList.add('warning');
+                winnerDisplay.style.display = 'none';
+                break;
+            case 2:
+                timer.classList.add('intermission');
+                timerText.textContent = 'Intermission: ' + timeLeft + 's';
+                if (winner) {
+                    winnerDisplay.style.display = 'block';
+                    winnerDisplay.textContent = 'Winner: ' + winner;
+                }
+                break;
+        }
+    }
+};
+
+// Global handler pre TIME správy
+window.lastTimeData = null;
+
+// Pridaj do websocket message handlera
+var originalOnMessage = ws.onmessage;
+ws.onmessage = function(event) {
+    // Spracuj pôvodnú správu
+    if (originalOnMessage) originalOnMessage.call(this, event);
+    
+    // Dekóduj ArrayBuffer
+    var data = new DataView(event.data);
+    var packetId = data.getUint8(0);
+    
+    // Ak je to chat packet (99)
+    if (packetId == 99) {
+        var offset = 1;
+        var flags = data.getUint8(offset++);
+        if (flags & 2) offset += 4;
+        if (flags & 4) offset += 8;
+        if (flags & 8) offset += 16;
+        
+        // Prečítaj správu
+        var msg = "";
+        while (offset < data.byteLength) {
+            var charCode = data.getUint16(offset, true);
+            offset += 2;
+            if (charCode == 0) break;
+            msg += String.fromCharCode(charCode);
+        }
+        
+        // Ak je to TIME správa, aktualizuj timer
+                console.log("Chat message received:", msg);
+            if (msg.indexOf("TIME:") === 0) {
+                // UPDATE TIMER
+                var parts = msg.split(":");
+                var phase = parseInt(parts[1]);
+                var timeLeft = parseInt(parts[2]);
+                var roundNum = parseInt(parts[3]);
+                
+                var timerText = document.getElementById("timerText");
+                var roundNumber = document.getElementById("roundNumber");
+                
+                if (timerText && roundNumber) {
+                    roundNumber.textContent = roundNum;
+                    
+                    if (phase === 0) {
+                        timerText.textContent = "Starting in " + timeLeft + "s";
+                    } else if (phase === 1) {
+                        var m = Math.floor(timeLeft / 60);
+                        var s = timeLeft % 60;
+                        timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+                    } else if (phase === 2) {
+                        timerText.textContent = "Intermission: " + timeLeft + "s";
+                    }
+                }
+                var parts = msg.split(":");
+                var phase = parseInt(parts[1]);
+                var timeLeft = parseInt(parts[2]);
+                var roundNum = parseInt(parts[3]);
+                var winner = parts[4] || "";
+                
+                // Update timer display
+                var timer = document.getElementById("roundTimer");
+                var timerText = document.getElementById("timerText");
+                var roundNumber = document.getElementById("roundNumber");
+                
+                if (timer && timerText && roundNumber) {
+                    timer.style.display = "block";
+                    roundNumber.textContent = roundNum;
+                    
+                    switch(phase) {
+                        case 0:
+                            timerText.textContent = "Starting in " + timeLeft + "s";
+                            break;
+                        case 1:
+                            var minutes = Math.floor(timeLeft / 60);
+                            var seconds = timeLeft % 60;
+                            timerText.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+                            break;
+                        case 2:
+                            timerText.textContent = "Intermission: " + timeLeft + "s";
+                            break;
+                    }
+                }
+                
+                return; // Nezobrazuj TIME: správy v chate
+            }
+            updateRoundTimer();
+        }
+    }
+};
+
+function updateRoundTimer() {
+    if (!window.lastTimeData) return;
+    
+    var timer = document.getElementById("roundTimer");
+    var timerText = document.getElementById("timerText");
+    var roundNumber = document.getElementById("roundNumber");
+    
+    if (!timer || !timerText) return;
+    
+    timer.style.display = "block";
+    roundNumber.textContent = window.lastTimeData.roundNum;
+    
+    switch(window.lastTimeData.phase) {
+        case 0:
+            timerText.textContent = "Starting in " + window.lastTimeData.timeLeft + "s";
+            break;
+        case 1:
+            var m = Math.floor(window.lastTimeData.timeLeft / 60);
+            var s = window.lastTimeData.timeLeft % 60;
+            timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+            break;
+        case 2:
+            timerText.textContent = "Intermission: " + window.lastTimeData.timeLeft + "s";
+            break;
+    }
+}
+
+// Timer handler for TIME messages
+setInterval(function() {
+    if (window.lastServerMessage && window.lastServerMessage.indexOf("TIME:") === 0) {
+        var parts = window.lastServerMessage.split(":");
+        var t = document.getElementById("timerText");
+        var r = document.getElementById("roundNumber");
+        if (t && r && parts.length >= 4) {
+            r.textContent = parts[3];
+            var phase = parseInt(parts[1]);
+            var time = parseInt(parts[2]);
+            if (phase === 1) {
+                var m = Math.floor(time / 60);
+                var s = time % 60;
+                t.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+            } else {
+                t.textContent = time + "s";
+            }
+        }
+    }
+}, 200);
+
+// Global TIME message handler
+window.handleTimeMessage = function(msg) {
+    if (msg && msg.indexOf("TIME:") === 0) {
+        var parts = msg.split(":");
+        var phase = parseInt(parts[1]);
+        var timeLeft = parseInt(parts[2]); 
+        var roundNum = parseInt(parts[3]);
+        
+        var timerText = document.getElementById("timerText");
+        var roundNumber = document.getElementById("roundNumber");
+        
+        if (timerText && roundNumber) {
+            roundNumber.textContent = roundNum;
+            
+            if (phase === 0) {
+                timerText.textContent = "Starting in " + timeLeft + "s";
+            } else if (phase === 1) {
+                var m = Math.floor(timeLeft / 60);
+                var s = timeLeft % 60;
+                timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+            } else if (phase === 2) {
+                timerText.textContent = "Intermission: " + timeLeft + "s";
+            }
+        }
+    }
+};
+
+// Hook into existing message processing
+var originalHandleMessage = window.handleMessage;
+window.handleMessage = function(msg) {
+    window.handleTimeMessage(msg);
+    if (originalHandleMessage) originalHandleMessage(msg);
+};
+
+// Timer packet handler
+window.handleTimerPacket = function(view) {
+    var phase = view.getUint8(1);
+    var timeLeft = view.getUint16(2, true);
+    var roundNum = view.getUint16(4, true);
+    
+    // Read winner name
+    var winner = "";
+    var offset = 6;
+    while (offset < view.byteLength) {
+        var charCode = view.getUint16(offset, true);
+        offset += 2;
+        if (charCode === 0) break;
+        winner += String.fromCharCode(charCode);
+    }
+    
+    // Update timer display
+    var timerText = document.getElementById("timerText");
+    var roundNumber = document.getElementById("roundNumber");
+    
+    if (timerText && roundNumber) {
+        roundNumber.textContent = roundNum;
+        
+        if (phase === 0) {
+            timerText.textContent = "Starting in " + timeLeft + "s";
+        } else if (phase === 1) {
+            var m = Math.floor(timeLeft / 60);
+            var s = timeLeft % 60;
+            timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+        } else if (phase === 2) {
+            timerText.textContent = "Intermission: " + timeLeft + "s";
+            if (winner) {
+                var winnerDiv = document.getElementById("winnerDisplay");
+                if (winnerDiv) {
+                    winnerDiv.style.display = "block";
+                    winnerDiv.textContent = "Winner: " + winner;
+                }
+            }
+        }
+    }
+};
+
+// Hook into WebSocket message handler
+(function() {
+    var originalOnMessage = ws.onmessage;
+    ws.onmessage = function(event) {
+        if (originalOnMessage) originalOnMessage.call(this, event);
+        
+        if (event.data instanceof ArrayBuffer) {
+            var view = new DataView(event.data);
+            var packetId = view.getUint8(0);
+            
+            if (packetId === 250) { // Timer packet
+                window.handleTimerPacket(view);
+            }
+        }
+    };
+})();

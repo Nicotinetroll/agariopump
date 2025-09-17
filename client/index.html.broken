@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="PlayAgario.fun - Win SOL prizes every 10 minutes!">
+    <meta name="keywords" content="agario, agar, io, cell, cells, virus, bacteria, blob, game, games, web game, html5, fun, solana, sol">
+    <meta name="robots" content="index, follow">
+    <meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <title>PlayAgario.fun - Win SOL Every Round!</title>
+
+    <link id="favicon" rel="icon" type="image/png" href="assets/img/favicon.png" />
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/index.css" rel="stylesheet">
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/log.js"></script>
+    <script src="assets/js/vector.js"></script>
+    <script src="assets/js/main_out.js"></script>
+
+    <style>
+        body {
+            height: 10000vh !important;
+            position: static !important;
+            overscroll-behavior: none;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f2f2f7;
+        }
+    
+        flutter-view {
+            position: fixed !important;
+            max-width: 100vw !important;
+            max-height: 100vh !important;
+        }
+        
+        /* iOS style overlay */
+        #overlays {
+            background: rgba(242, 242, 247, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        /* iOS style card */
+        #helloDialog {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 414px;
+            overflow: hidden;
+        }
+        
+        /* iOS style header section */
+        .form-group:first-child {
+            background: linear-gradient(to bottom, #ffffff, #f9f9fb);
+            padding: 35px 20px 25px 20px;
+            margin: 0;
+            text-align: center;
+            border-bottom: 0.5px solid rgba(60, 60, 67, 0.12);
+        }
+        
+        /* iOS style title */
+        #title {
+            font-weight: 700;
+            font-size: 34px;
+            letter-spacing: -0.4px;
+            color: #000000;
+            margin-bottom: 8px;
+        }
+        
+        #motd {
+            color: #8e8e93;
+            font-weight: 400;
+            font-size: 15px;
+            margin-bottom: 0;
+            letter-spacing: -0.2px;
+        }
+        
+        /* Content padding */
+        form {
+            padding: 0;
+        }
+        
+        /* iOS list group style */
+        .form-group:not(:first-child) {
+            padding: 0 16px;
+            margin-bottom: 35px;
+        }
+        
+        /* Prize info - iOS notification style */
+        .prize-info {
+            background: linear-gradient(135deg, #FFE5B4 0%, #FFD4A3 100%) !important;
+            padding: 14px 16px !important;
+            margin: 0 !important;
+            text-align: center !important;
+            font-weight: 600 !important;
+            color: #7A5200 !important;
+            border: none !important;
+            font-size: 14px;
+            border-radius: 0 !important;
+            border-top: 0.5px solid rgba(60, 60, 67, 0.12);
+            border-bottom: 0.5px solid rgba(60, 60, 67, 0.12);
+            letter-spacing: -0.2px;
+        }
+        
+        /* iOS style input */
+        #nick {
+            background: #f2f2f7 !important;
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 17px 16px !important;
+            color: #000000 !important;
+            font-size: 17px !important;
+            width: 100% !important;
+            transition: background-color 0.15s ease !important;
+            -webkit-appearance: none !important;
+            margin-top: 20px !important;
+            font-weight: 400;
+            letter-spacing: -0.4px;
+        }
+        
+        #nick:focus {
+            background: #e5e5ea !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        
+        #nick::placeholder {
+            color: #3c3c4399;
+            font-weight: 400;
+        }
+        
+        /* iOS style buttons container - SMALLER HEIGHT */
+        .social-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 0 16px 20px 16px !important;
+            padding: 0 !important;
+        }
+        
+        .social-buttons a {
+            flex: 1;
+            border-radius: 12px !important;
+            padding: 10px 12px !important; /* Reduced height */
+            text-align: center !important;
+            font-weight: 500 !important;
+            text-decoration: none !important;
+            font-size: 15px !important; /* Slightly smaller font */
+            transition: opacity 0.15s !important;
+            display: block;
+            letter-spacing: -0.3px;
+            line-height: 1.2;
+        }
+        
+        .social-buttons a:active {
+            opacity: 0.6;
+            transform: scale(0.98);
+        }
+        
+        /* Gray social buttons - iOS secondary button style */
+        .social-buttons a.btn-primary,
+        .social-buttons a.btn-warning {
+            background: #e5e5ea !important;
+            color: #000000 !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        
+        .social-buttons a.btn-primary:hover,
+        .social-buttons a.btn-warning:hover {
+            background: #d1d1d6 !important;
+        }
+        
+        /* iOS button group */
+        .form-group:has(#play-btn) {
+            padding: 0 16px;
+            margin-bottom: 20px;
+        }
+        
+        /* Primary blue CTA button - iOS system blue */
+        #play-btn {
+            background: #007aff !important;
+            color: white !important;
+            width: 75% !important;
+            font-size: 17px !important;
+            font-weight: 600 !important;
+            border-radius: 12px !important;
+            padding: 15px !important;
+            border: none !important;
+            box-shadow: none !important;
+            transition: all 0.15s !important;
+            letter-spacing: -0.4px;
+        }
+        
+        #play-btn:hover {
+            background: #0051d5 !important;
+        }
+        
+        #play-btn:active {
+            opacity: 0.7 !important;
+            transform: scale(0.98);
+        }
+        
+        #settings-btn {
+            background: #f2f2f7 !important;
+            color: #007aff !important;
+            width: 23% !important;
+            border-radius: 12px !important;
+            padding: 15px !important;
+            border: none !important;
+            box-shadow: none !important;
+            transition: all 0.15s !important;
+        }
+        
+        #settings-btn:hover {
+            background: #e5e5ea !important;
+        }
+        
+        #settings-btn:active {
+            opacity: 0.7 !important;
+            transform: scale(0.98);
+        }
+        
+        /* iOS Settings panel */
+        #settings, .settings-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 0;
+            margin: 0 16px 20px 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        
+        #settings #mainform {
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* iOS Toggle Switches */
+        .toggle-container {
+            padding: 6px;
+        }
+        
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-bottom: 0.5px solid rgba(60, 60, 67, 0.12);
+            min-height: 44px;
+        }
+        
+        .toggle-item:last-child {
+            border-bottom: none;
+        }
+        
+        .toggle-label {
+            font-size: 16px;
+            color: #000000;
+            letter-spacing: -0.3px;
+            flex: 1;
+        }
+        
+        /* iOS Toggle Switch */
+        .ios-toggle {
+            position: relative;
+            display: inline-block;
+            width: 51px;
+            height: 31px;
+            margin: 0;
+        }
+        
+        .ios-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e9e9eb;
+            transition: background-color 0.2s;
+            border-radius: 31px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 27px;
+            width: 27px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: transform 0.2s;
+            border-radius: 50%;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .ios-toggle input:checked + .toggle-slider {
+            background-color: #34c759;
+        }
+        
+        .ios-toggle input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        
+        .ios-toggle input:focus + .toggle-slider {
+            outline: none;
+        }
+        
+        /* Play button with icon */
+        #play-btn {
+            background: #007aff !important;
+            color: white !important;
+            width: 75% !important;
+            font-size: 17px !important;
+            font-weight: 600 !important;
+            border-radius: 12px !important;
+            padding: 15px !important;
+            border: none !important;
+            box-shadow: none !important;
+            transition: all 0.15s !important;
+            letter-spacing: -0.4px;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px;
+        }
+        
+        #play-btn i {
+            font-size: 18px;
+        }
+        
+        /* Spectate button with icon */
+        #spectate-btn {
+            background: #e5e5ea !important;
+            color: #000000 !important;
+            border: none !important;
+            font-weight: 500 !important;
+            font-size: 17px !important;
+            border-radius: 12px !important;
+            padding: 14px !important;
+            width: 100% !important;
+            transition: all 0.15s !important;
+            letter-spacing: -0.4px;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px;
+        }
+        
+        #spectate-btn i {
+            font-size: 16px;
+        }
+        
+        #spectate-btn:hover {
+            background: #d1d1d6 !important;
+        }
+        
+        #spectate-btn:active {
+            opacity: 0.7 !important;
+            transform: scale(0.98);
+        }
+        
+        /* iOS Toggle style checkboxes - FIXED ALIGNMENT */
+        .checkbox {
+            background: white;
+            border-radius: 12px;
+            margin: 12px;
+            padding: 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        
+        .checkbox label {
+            color: #000000;
+            font-weight: 400;
+            font-size: 16px;
+            padding: 14px 16px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 0.5px solid rgba(60, 60, 67, 0.12);
+            letter-spacing: -0.3px;
+            cursor: pointer;
+            transition: background-color 0.15s;
+            line-height: 1;
+            min-height: 48px;
+            white-space: nowrap;
+        }
+        
+        .checkbox label:hover {
+            background: #f9f9fb;
+        }
+        
+        .checkbox label:last-child {
+            border-bottom: none;
+        }
+        
+        .checkbox label span {
+            flex: 1;
+            padding-right: 15px;
+            display: block;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .checkbox input[type="checkbox"] {
+            accent-color: #34c759;
+            width: 20px;
+            height: 20px;
+            margin: 0;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        
+        /* Remove footer completely */
+        hr {
+            display: none !important;
+        }
+        
+        #footer {
+            display: none !important;
+        }
+        
+        /* iOS Chat - Improved design */
+        #chat_textbox {
+            background: rgba(255, 255, 255, 0.98) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8) !important;
+            border-radius: 22px !important;
+            color: #000000 !important;
+            padding: 12px 20px !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+            font-size: 16px;
+            letter-spacing: -0.3px;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 300px;
+            z-index: 100;
+        }
+        
+        #chat_textbox::placeholder {
+            color: #3c3c4399;
+        }
+        
+        #chat_textbox:focus {
+            outline: none !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+            border-color: rgba(0, 122, 255, 0.3) !important;
+        }
+        
+        /* Improved Canvas styling */
+        #canvas {
+            border-radius: 0;
+            box-shadow: none;
+            background: #ffffff;
+        }
+        
+        /* iOS style Leaderboard */
+        #leaderboard {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 14px;
+            padding: 12px;
+            min-width: 200px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+        }
+        
+        #leaderboard h4 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #000000;
+            letter-spacing: -0.3px;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+        
+        #leaderboard-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        #leaderboard-list li {
+            padding: 8px 0;
+            border-bottom: 0.5px solid rgba(60, 60, 67, 0.12);
+            font-size: 15px;
+            color: #000000;
+            display: flex;
+            align-items: center;
+            letter-spacing: -0.3px;
+        }
+        
+        #leaderboard-list li:last-child {
+            border-bottom: none;
+        }
+        
+        #leaderboard-list li:nth-child(1) {
+            color: #FFD700;
+            font-weight: 600;
+        }
+        
+        #leaderboard-list li:nth-child(2) {
+            color: #C0C0C0;
+            font-weight: 500;
+        }
+        
+        #leaderboard-list li:nth-child(3) {
+            color: #CD7F32;
+            font-weight: 500;
+        }
+        
+        /* Score display */
+        #score {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 14px;
+            padding: 12px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+            letter-spacing: -0.3px;
+        }
+        
+        /* FPS counter */
+        #fps {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #34c759;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        
+        /* Mini-map */
+        #minimap {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* iOS Modal */
+        .modal-content {
+            background: #ffffff !important;
+            border: none !important;
+            border-radius: 14px !important;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
+        }
+        
+        .modal-header {
+            border-bottom: 0.5px solid rgba(60, 60, 67, 0.12) !important;
+            background: #f9f9fb;
+            padding: 16px 20px;
+        }
+        
+        .modal-title {
+            color: #000000;
+            font-weight: 600;
+            font-size: 17px;
+            text-align: center;
+            letter-spacing: -0.4px;
+        }
+        
+        .modal-body {
+            color: #000000;
+            padding: 20px;
+            font-size: 17px;
+            line-height: 1.4;
+            letter-spacing: -0.4px;
+        }
+        
+        .modal-footer {
+            border-top: 0.5px solid rgba(60, 60, 67, 0.12) !important;
+            background: #f9f9fb;
+            padding: 0;
+            display: flex;
+        }
+        
+        .modal-footer .btn {
+            flex: 1;
+            border-radius: 0 !important;
+            border-right: 0.5px solid rgba(60, 60, 67, 0.12) !important;
+            background: transparent !important;
+            color: #007aff !important;
+            font-size: 17px !important;
+            font-weight: 400 !important;
+            padding: 16px !important;
+            letter-spacing: -0.4px;
+        }
+        
+        .modal-footer .btn:last-child {
+            border-right: none !important;
+            font-weight: 600 !important;
+        }
+        
+        .modal-footer .btn:hover {
+            background: #f2f2f7 !important;
+        }
+        
+        .close {
+            color: #8e8e93 !important;
+            opacity: 1 !important;
+            font-size: 28px;
+            font-weight: 300;
+            line-height: 0.7;
+        }
+        
+        /* Connecting screen */
+        #connecting > div {
+            background: #ffffff !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+            border: none !important;
+            border-radius: 14px !important;
+            padding: 32px !important;
+        }
+        
+        #connecting h2 {
+            color: #000000;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: -0.4px;
+        }
+        
+        #connecting p {
+            color: #8e8e93;
+            font-size: 15px;
+            letter-spacing: -0.2px;
+        }
+        
+        /* Remove bootstrap button styles */
+        .btn:hover, .btn:focus, .btn:active, .btn:active:focus {
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        
+        /* Safari-specific CSS */
+        @supports (-webkit-touch-callout: inherit) {
+            body {
+                height: 1vh !important;
+            }
+            
+            #helloDialog {
+                -webkit-transform: translateZ(0);
+            }
+        }
+        
+        /* Smooth animations */
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* iOS bounce effect for buttons */
+        @keyframes buttonTap {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Game stats panel */
+        .game-stats {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 14px;
+            padding: 8px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #000000;
+            letter-spacing: -0.3px;
+        }
+        
+        .game-stats span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<div id="roundTimer" style="position: fixed !important; top: 10px !important; left: 50% !important; transform: translateX(-50%) !important; z-index: 999999 !important; background: rgba(0,0,0,0.8) !important; color: white !important; padding: 20px !important; border-radius: 10px !important; font-size: 24px !important; font-weight: bold !important; display: block !important; visibility: visible !important;">
+    ROUND <span id="roundNumber">1</span> - <span id="timerText">Loading... <span id="testCounter">0</span></span>
+</div>
+    <div class="modal fade" id="inPageModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="inPageModalTitle" class="modal-title">Failed to Load</h4>
+                </div>
+                <div id="inPageModalBody" class="modal-body">
+                    <p>Failed to load. Please check your connection!</p>
+                    <div class="center">
+                        <div class="loader"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="overlays">
+        <div id="helloDialog">
+            <form role="form">
+                <div class="form-group">
+                    <h2 id="title">PlayAgario.fun</h2>
+                    <h6 id="motd">Win SOL Every 10 Minutes!</h6>
+                </div>
+
+                <div class="prize-info">
+                    💰 Round winner gets creator's fee in SOL! 💰
+                </div>
+
+                <div class="form-group">
+                    <input id="nick" class="form-control save" data-box-id="0" 
+                           placeholder="Use your SOL address as name!" 
+                           maxlength="50" />
+                    <br clear="both" />
+                </div>
+
+                <div class="social-buttons">
+                    <a href="https://x.com/PlayAgario_Fun" target="_blank" class="btn btn-primary">
+                        Twitter/X
+                    </a>
+                    <a href="https://pump.fun/coin/DbBqQVx3sSkrzM6LXDBH4Nto2BS6eFqcKeheyvC6pump" target="_blank" class="btn btn-warning">
+                        Pump.fun
+                    </a>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" id="play-btn" onclick="setNick(document.getElementById('nick').value); return false;" 
+                            class="btn btn-play btn-primary btn-needs-server">
+                        <i class="glyphicon glyphicon-play-circle"></i> Play
+                    </button>
+                    <button onclick="$('#settings, #instructions').toggle(); return false;" 
+                            class="btn btn-info btn-settings" id="settings-btn">
+                        <i class="glyphicon glyphicon-cog"></i>
+                    </button>
+                    <br clear="both" />
+                </div>
+
+                <div class="form-group" style="padding-top: 0; margin-top: -5px; margin-bottom: 20px;">
+                    <button id="spectate-btn" onclick="spectate(); return false;" 
+                            style="width: 100%" class="btn btn-spectate btn-needs-server">
+                        <i class="glyphicon glyphicon-eye-open"></i> Spectate
+                    </button>
+                </div>
+
+                <div id="settings" class="settings-panel" style="display:none;">
+                    <div class="toggle-container">
+                        <div class="toggle-item">
+                            <span class="toggle-label">Skins</span>
+                            <label class="ios-toggle">
+                                <input type="checkbox" checked class="save" data-box-id="1" onchange="setSkins($(this).is(':checked'));">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-item">
+                            <span class="toggle-label">Names</span>
+                            <label class="ios-toggle">
+                                <input type="checkbox" checked class="save" data-box-id="2" onchange="setNames($(this).is(':checked'));">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-item">
+                            <span class="toggle-label">Colors</span>
+                            <label class="ios-toggle">
+                                <input type="checkbox" checked class="save" data-box-id="4" onchange="setColors(!$(this).is(':checked'));">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-item">
+                            <span class="toggle-label">Show mass</span>
+                            <label class="ios-toggle">
+                                <input type="checkbox" class="save" data-box-id="5" onchange="setShowMass($(this).is(':checked'));">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-item">
+                            <span class="toggle-label">Smooth Render</span>
+                            <label class="ios-toggle">
+                                <input type="checkbox" class="save" data-box-id="6" onchange="setSmooth($(this).is(':checked'));">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-item">
+                            <span class="toggle-label">Hide Chat</span>
+                            <label class="ios-toggle">
+                                <input type="checkbox" class="save" data-box-id="7" onchange="setChatHide($(this).is(':checked'));">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="connecting">
+        <div style="width: 350px; background-color: #FFFFFF; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;">
+            <h2>Connecting</h2>
+            <p>Joining PlayAgario.fun...</p>
+        </div>
+    </div>
+
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <input type="text" id="chat_textbox" placeholder="Press enter to chat!" maxlength="200" />
+    <div style="font-family:'Ubuntu'">&nbsp;</div>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script>
+<script>
+// Disable local timer
+window.liveTimerActive = false;
+
+console.log("🔄 Disabling local timer, enabling server sync");
+
+// Simple packet 99 decoder for BroadCast messages
+function decodePacket99(view) {
+    try {
+        var offset = 0;
+        
+        // Skip packet ID (99)
+        offset += 1;
+        
+        // Skip flags (1 byte) 
+        var flags = view.getUint8(offset);
+        offset += 1;
+        
+        // Skip color bytes
+        offset += 3;
+        
+        // Read sender name (skip it)
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+        }
+        
+        // Read message content
+        var message = "";
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+            if (charCode > 0 && charCode < 65536) {
+                message += String.fromCharCode(charCode);
+            }
+        }
+        
+        return message;
+    } catch (e) {
+        console.log("Error decoding packet 99:", e);
+        return null;
+    }
+}
+
+// Enhanced WebSocket override
+(function() {
+    var OriginalWebSocket = window.WebSocket;
+    window.WebSocket = function(url, protocols) {
+        var ws = new OriginalWebSocket(url, protocols);
+        
+        ws.addEventListener('message', function(event) {
+            if (event.data instanceof ArrayBuffer) {
+                var view = new DataView(event.data);
+                var packetId = view.getUint8(0);
+                
+                if (packetId === 99) {
+                    var message = decodePacket99(view);
+                    if (message && message.indexOf("TIME:") === 0) {
+                        console.log("🎯 SERVER TIME MESSAGE:", message);
+                        
+                        var parts = message.split(":");
+                        var phase = parseInt(parts[1]);
+                        var timeLeft = parseInt(parts[2]); 
+                        var roundNum = parseInt(parts[3]);
+                        var winner = parts[4] || "";
+                        
+                        // Update timer display
+                        var timerText = document.getElementById('timerText');
+                        var roundNumber = document.getElementById('roundNumber');
+                        
+                        if (timerText && roundNumber) {
+                            roundNumber.textContent = roundNum;
+                            
+                            if (phase === 0) {
+                                timerText.textContent = "Starting in " + timeLeft + "s";
+                            } else if (phase === 1) {
+                                var m = Math.floor(timeLeft / 60);
+                                var s = timeLeft % 60;
+                                timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+                            } else if (phase === 2) {
+                                timerText.textContent = "Intermission: " + timeLeft + "s";
+                                if (winner) {
+                                    timerText.textContent += " | Winner: " + winner;
+                                }
+                            }
+                            
+                            console.log("✅ Timer synced from server: " + timerText.textContent);
+                        }
+                    }
+                }
+            }
+        });
+        
+        return ws;
+    };
+    
+    // Copy properties
+    Object.setPrototypeOf(window.WebSocket, OriginalWebSocket);
+    window.WebSocket.prototype = OriginalWebSocket.prototype;
+})();
+
+console.log("⚡ Server sync timer activated!");
+</script>
+        window.scroll(0, window.document.body.scrollHeight);
+    </script>
+</body>
+</html>
+<script>
+<script>
+// Disable local timer
+window.liveTimerActive = false;
+
+console.log("🔄 Disabling local timer, enabling server sync");
+
+// Simple packet 99 decoder for BroadCast messages
+function decodePacket99(view) {
+    try {
+        var offset = 0;
+        
+        // Skip packet ID (99)
+        offset += 1;
+        
+        // Skip flags (1 byte) 
+        var flags = view.getUint8(offset);
+        offset += 1;
+        
+        // Skip color bytes
+        offset += 3;
+        
+        // Read sender name (skip it)
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+        }
+        
+        // Read message content
+        var message = "";
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+            if (charCode > 0 && charCode < 65536) {
+                message += String.fromCharCode(charCode);
+            }
+        }
+        
+        return message;
+    } catch (e) {
+        console.log("Error decoding packet 99:", e);
+        return null;
+    }
+}
+
+// Enhanced WebSocket override
+(function() {
+    var OriginalWebSocket = window.WebSocket;
+    window.WebSocket = function(url, protocols) {
+        var ws = new OriginalWebSocket(url, protocols);
+        
+        ws.addEventListener('message', function(event) {
+            if (event.data instanceof ArrayBuffer) {
+                var view = new DataView(event.data);
+                var packetId = view.getUint8(0);
+                
+                if (packetId === 99) {
+                    var message = decodePacket99(view);
+                    if (message && message.indexOf("TIME:") === 0) {
+                        console.log("🎯 SERVER TIME MESSAGE:", message);
+                        
+                        var parts = message.split(":");
+                        var phase = parseInt(parts[1]);
+                        var timeLeft = parseInt(parts[2]); 
+                        var roundNum = parseInt(parts[3]);
+                        var winner = parts[4] || "";
+                        
+                        // Update timer display
+                        var timerText = document.getElementById('timerText');
+                        var roundNumber = document.getElementById('roundNumber');
+                        
+                        if (timerText && roundNumber) {
+                            roundNumber.textContent = roundNum;
+                            
+                            if (phase === 0) {
+                                timerText.textContent = "Starting in " + timeLeft + "s";
+                            } else if (phase === 1) {
+                                var m = Math.floor(timeLeft / 60);
+                                var s = timeLeft % 60;
+                                timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+                            } else if (phase === 2) {
+                                timerText.textContent = "Intermission: " + timeLeft + "s";
+                                if (winner) {
+                                    timerText.textContent += " | Winner: " + winner;
+                                }
+                            }
+                            
+                            console.log("✅ Timer synced from server: " + timerText.textContent);
+                        }
+                    }
+                }
+            }
+        });
+        
+        return ws;
+    };
+    
+    // Copy properties
+    Object.setPrototypeOf(window.WebSocket, OriginalWebSocket);
+    window.WebSocket.prototype = OriginalWebSocket.prototype;
+})();
+
+console.log("⚡ Server sync timer activated!");
+</script>
+// Debug - zachyť všetky console správy
+(function() {
+    var originalLog = console.log;
+    console.log = function() {
+        originalLog.apply(console, arguments);
+        var msg = Array.from(arguments).join(' ');
+        
+        if (msg.includes("TIME:")) {
+            console.warn("TIME FOUND:", msg);
+            
+            // Extract TIME message
+            var match = msg.match(/TIME:(\d+):(\d+):(\d+)/);
+            if (match) {
+                var phase = parseInt(match[1]);
+                var time = parseInt(match[2]);
+                var round = parseInt(match[3]);
+                
+                var timerText = document.getElementById("timerText");
+                var roundNumber = document.getElementById("roundNumber");
+                
+                if (timerText && roundNumber) {
+                    roundNumber.textContent = round;
+                    
+                    if (phase === 0) {
+                        timerText.textContent = "Starting in " + time + "s";
+                    } else if (phase === 1) {
+                        var m = Math.floor(time / 60);
+                        var s = time % 60;
+                        timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+                    } else if (phase === 2) {
+                        timerText.textContent = "Intermission: " + time + "s";
+                    }
+                    
+                    console.warn("Timer updated to:", timerText.textContent);
+                }
+            }
+        }
+    };
+    
+    console.log("Timer debug loaded - waiting for TIME messages...");
+})();
+</script>
+<script>
+<script>
+// Disable local timer
+window.liveTimerActive = false;
+
+console.log("🔄 Disabling local timer, enabling server sync");
+
+// Simple packet 99 decoder for BroadCast messages
+function decodePacket99(view) {
+    try {
+        var offset = 0;
+        
+        // Skip packet ID (99)
+        offset += 1;
+        
+        // Skip flags (1 byte) 
+        var flags = view.getUint8(offset);
+        offset += 1;
+        
+        // Skip color bytes
+        offset += 3;
+        
+        // Read sender name (skip it)
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+        }
+        
+        // Read message content
+        var message = "";
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+            if (charCode > 0 && charCode < 65536) {
+                message += String.fromCharCode(charCode);
+            }
+        }
+        
+        return message;
+    } catch (e) {
+        console.log("Error decoding packet 99:", e);
+        return null;
+    }
+}
+
+// Enhanced WebSocket override
+(function() {
+    var OriginalWebSocket = window.WebSocket;
+    window.WebSocket = function(url, protocols) {
+        var ws = new OriginalWebSocket(url, protocols);
+        
+        ws.addEventListener('message', function(event) {
+            if (event.data instanceof ArrayBuffer) {
+                var view = new DataView(event.data);
+                var packetId = view.getUint8(0);
+                
+                if (packetId === 99) {
+                    var message = decodePacket99(view);
+                    if (message && message.indexOf("TIME:") === 0) {
+                        console.log("🎯 SERVER TIME MESSAGE:", message);
+                        
+                        var parts = message.split(":");
+                        var phase = parseInt(parts[1]);
+                        var timeLeft = parseInt(parts[2]); 
+                        var roundNum = parseInt(parts[3]);
+                        var winner = parts[4] || "";
+                        
+                        // Update timer display
+                        var timerText = document.getElementById('timerText');
+                        var roundNumber = document.getElementById('roundNumber');
+                        
+                        if (timerText && roundNumber) {
+                            roundNumber.textContent = roundNum;
+                            
+                            if (phase === 0) {
+                                timerText.textContent = "Starting in " + timeLeft + "s";
+                            } else if (phase === 1) {
+                                var m = Math.floor(timeLeft / 60);
+                                var s = timeLeft % 60;
+                                timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+                            } else if (phase === 2) {
+                                timerText.textContent = "Intermission: " + timeLeft + "s";
+                                if (winner) {
+                                    timerText.textContent += " | Winner: " + winner;
+                                }
+                            }
+                            
+                            console.log("✅ Timer synced from server: " + timerText.textContent);
+                        }
+                    }
+                }
+            }
+        });
+        
+        return ws;
+    };
+    
+    // Copy properties
+    Object.setPrototypeOf(window.WebSocket, OriginalWebSocket);
+    window.WebSocket.prototype = OriginalWebSocket.prototype;
+})();
+
+console.log("⚡ Server sync timer activated!");
+</script>
+// Test counter to verify JS is working
+var counter = 0;
+setInterval(function() {
+    counter++;
+    var testEl = document.getElementById('testCounter');
+    if (testEl) {
+        testEl.textContent = counter;
+    }
+    
+    // Test if timer updates work
+    if (counter === 5) {
+        var timerText = document.getElementById('timerText');
+        if (timerText) {
+            timerText.textContent = 'JS Working: ' + counter + 's';
+        }
+    }
+}, 1000);
+</script>
+
+<script>
+<script>
+// Disable local timer
+window.liveTimerActive = false;
+
+console.log("🔄 Disabling local timer, enabling server sync");
+
+// Simple packet 99 decoder for BroadCast messages
+function decodePacket99(view) {
+    try {
+        var offset = 0;
+        
+        // Skip packet ID (99)
+        offset += 1;
+        
+        // Skip flags (1 byte) 
+        var flags = view.getUint8(offset);
+        offset += 1;
+        
+        // Skip color bytes
+        offset += 3;
+        
+        // Read sender name (skip it)
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+        }
+        
+        // Read message content
+        var message = "";
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+            if (charCode > 0 && charCode < 65536) {
+                message += String.fromCharCode(charCode);
+            }
+        }
+        
+        return message;
+    } catch (e) {
+        console.log("Error decoding packet 99:", e);
+        return null;
+    }
+}
+
+// Enhanced WebSocket override
+(function() {
+    var OriginalWebSocket = window.WebSocket;
+    window.WebSocket = function(url, protocols) {
+        var ws = new OriginalWebSocket(url, protocols);
+        
+        ws.addEventListener('message', function(event) {
+            if (event.data instanceof ArrayBuffer) {
+                var view = new DataView(event.data);
+                var packetId = view.getUint8(0);
+                
+                if (packetId === 99) {
+                    var message = decodePacket99(view);
+                    if (message && message.indexOf("TIME:") === 0) {
+                        console.log("🎯 SERVER TIME MESSAGE:", message);
+                        
+                        var parts = message.split(":");
+                        var phase = parseInt(parts[1]);
+                        var timeLeft = parseInt(parts[2]); 
+                        var roundNum = parseInt(parts[3]);
+                        var winner = parts[4] || "";
+                        
+                        // Update timer display
+                        var timerText = document.getElementById('timerText');
+                        var roundNumber = document.getElementById('roundNumber');
+                        
+                        if (timerText && roundNumber) {
+                            roundNumber.textContent = roundNum;
+                            
+                            if (phase === 0) {
+                                timerText.textContent = "Starting in " + timeLeft + "s";
+                            } else if (phase === 1) {
+                                var m = Math.floor(timeLeft / 60);
+                                var s = timeLeft % 60;
+                                timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+                            } else if (phase === 2) {
+                                timerText.textContent = "Intermission: " + timeLeft + "s";
+                                if (winner) {
+                                    timerText.textContent += " | Winner: " + winner;
+                                }
+                            }
+                            
+                            console.log("✅ Timer synced from server: " + timerText.textContent);
+                        }
+                    }
+                }
+            }
+        });
+        
+        return ws;
+    };
+    
+    // Copy properties
+    Object.setPrototypeOf(window.WebSocket, OriginalWebSocket);
+    window.WebSocket.prototype = OriginalWebSocket.prototype;
+})();
+
+console.log("⚡ Server sync timer activated!");
+</script>
+// Manual timer test 
+setTimeout(function() {
+    console.log("Testing manual TIME message...");
+    
+    // Simulate TIME message: TIME:1:580:1:
+    var msg = "TIME:1:580:1:";
+    var parts = msg.split(":");
+    var phase = parseInt(parts[1]);
+    var timeLeft = parseInt(parts[2]);
+    var roundNum = parseInt(parts[3]);
+    
+    console.log("Parsed: phase=" + phase + ", time=" + timeLeft + ", round=" + roundNum);
+    
+    var timerText = document.getElementById('timerText');
+    var roundNumber = document.getElementById('roundNumber');
+    
+    if (timerText && roundNumber) {
+        roundNumber.textContent = roundNum;
+        
+        if (phase === 1) {
+            var m = Math.floor(timeLeft / 60);
+            var s = timeLeft % 60;
+            timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+            console.log("Timer updated to: " + m + ":" + (s < 10 ? "0" : "") + s);
+        }
+    }
+}, 3000);
+
+// Also try to hook into any existing WebSocket messages
+if (typeof window.originalHandleTimeMessage === 'undefined') {
+    window.originalHandleTimeMessage = window.handleTimeMessage || function() {};
+    
+    window.handleTimeMessage = function(msg) {
+        console.log("handleTimeMessage called with:", msg);
+        window.originalHandleTimeMessage(msg);
+    };
+}
+</script>
+
+<script>
+<script>
+// Disable local timer
+window.liveTimerActive = false;
+
+console.log("🔄 Disabling local timer, enabling server sync");
+
+// Simple packet 99 decoder for BroadCast messages
+function decodePacket99(view) {
+    try {
+        var offset = 0;
+        
+        // Skip packet ID (99)
+        offset += 1;
+        
+        // Skip flags (1 byte) 
+        var flags = view.getUint8(offset);
+        offset += 1;
+        
+        // Skip color bytes
+        offset += 3;
+        
+        // Read sender name (skip it)
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+        }
+        
+        // Read message content
+        var message = "";
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+            if (charCode > 0 && charCode < 65536) {
+                message += String.fromCharCode(charCode);
+            }
+        }
+        
+        return message;
+    } catch (e) {
+        console.log("Error decoding packet 99:", e);
+        return null;
+    }
+}
+
+// Enhanced WebSocket override
+(function() {
+    var OriginalWebSocket = window.WebSocket;
+    window.WebSocket = function(url, protocols) {
+        var ws = new OriginalWebSocket(url, protocols);
+        
+        ws.addEventListener('message', function(event) {
+            if (event.data instanceof ArrayBuffer) {
+                var view = new DataView(event.data);
+                var packetId = view.getUint8(0);
+                
+                if (packetId === 99) {
+                    var message = decodePacket99(view);
+                    if (message && message.indexOf("TIME:") === 0) {
+                        console.log("🎯 SERVER TIME MESSAGE:", message);
+                        
+                        var parts = message.split(":");
+                        var phase = parseInt(parts[1]);
+                        var timeLeft = parseInt(parts[2]); 
+                        var roundNum = parseInt(parts[3]);
+                        var winner = parts[4] || "";
+                        
+                        // Update timer display
+                        var timerText = document.getElementById('timerText');
+                        var roundNumber = document.getElementById('roundNumber');
+                        
+                        if (timerText && roundNumber) {
+                            roundNumber.textContent = roundNum;
+                            
+                            if (phase === 0) {
+                                timerText.textContent = "Starting in " + timeLeft + "s";
+                            } else if (phase === 1) {
+                                var m = Math.floor(timeLeft / 60);
+                                var s = timeLeft % 60;
+                                timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+                            } else if (phase === 2) {
+                                timerText.textContent = "Intermission: " + timeLeft + "s";
+                                if (winner) {
+                                    timerText.textContent += " | Winner: " + winner;
+                                }
+                            }
+                            
+                            console.log("✅ Timer synced from server: " + timerText.textContent);
+                        }
+                    }
+                }
+            }
+        });
+        
+        return ws;
+    };
+    
+    // Copy properties
+    Object.setPrototypeOf(window.WebSocket, OriginalWebSocket);
+    window.WebSocket.prototype = OriginalWebSocket.prototype;
+})();
+
+console.log("⚡ Server sync timer activated!");
+</script>
+// Hook into WebSocket to catch TIME messages
+(function() {
+    console.log("Setting up WebSocket TIME message interceptor...");
+    
+    // Override native WebSocket
+    var OriginalWebSocket = window.WebSocket;
+    window.WebSocket = function(url, protocols) {
+        console.log("WebSocket created for:", url);
+        var ws = new OriginalWebSocket(url, protocols);
+        
+        // Override onmessage
+        var originalOnMessage = ws.onmessage;
+        ws.onmessage = function(event) {
+            // Call original handler
+            if (originalOnMessage) {
+                originalOnMessage.call(this, event);
+            }
+            
+            // Check for TIME messages in binary data
+            if (event.data instanceof ArrayBuffer) {
+                var view = new DataView(event.data);
+                var packetId = view.getUint8(0);
+                
+                // Check for chat message packet (ID 99 or similar)
+                if (packetId === 99) {
+                    try {
+                        var offset = 1;
+                        // Skip flags
+                        var flags = view.getUint8(offset);
+                        offset += 1;
+                        if (flags & 2) { offset += 4; }
+                        if (flags & 4) { offset += 8; }
+                        if (flags & 8) { offset += 16; }
+                        
+                        // Read message
+                        var msg = "";
+                        while (offset < view.byteLength) {
+                            var charCode = view.getUint16(offset, true);
+                            offset += 2;
+                            if (charCode == 0) break;
+                            msg += String.fromCharCode(charCode);
+                        }
+                        
+                        console.log("Chat message intercepted:", msg);
+                        
+                        if (msg.indexOf("TIME:") === 0) {
+                            console.log("TIME message detected:", msg);
+                            processTimeMessage(msg);
+                        }
+                    } catch (e) {
+                        console.log("Error parsing message:", e);
+                    }
+                }
+            }
+        };
+        
+        return ws;
+    };
+    
+    // Copy properties
+    window.WebSocket.prototype = OriginalWebSocket.prototype;
+    window.WebSocket.CONNECTING = OriginalWebSocket.CONNECTING;
+    window.WebSocket.OPEN = OriginalWebSocket.OPEN;
+    window.WebSocket.CLOSING = OriginalWebSocket.CLOSING;
+    window.WebSocket.CLOSED = OriginalWebSocket.CLOSED;
+})();
+
+function processTimeMessage(msg) {
+    console.log("Processing TIME message:", msg);
+    var parts = msg.split(":");
+    var phase = parseInt(parts[1]);
+    var timeLeft = parseInt(parts[2]);
+    var roundNum = parseInt(parts[3]);
+    var winner = parts[4] || "";
+    
+    console.log("Timer data: phase=" + phase + ", time=" + timeLeft + ", round=" + roundNum + ", winner=" + winner);
+    
+    var timerText = document.getElementById('timerText');
+    var roundNumber = document.getElementById('roundNumber');
+    
+    if (timerText && roundNumber) {
+        roundNumber.textContent = roundNum;
+        
+        if (phase === 0) {
+            timerText.textContent = "Starting in " + timeLeft + "s";
+        } else if (phase === 1) {
+            var m = Math.floor(timeLeft / 60);
+            var s = timeLeft % 60;
+            timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+        } else if (phase === 2) {
+            timerText.textContent = "Intermission: " + timeLeft + "s";
+            if (winner) {
+                timerText.textContent += " | Winner: " + winner;
+            }
+        }
+        
+        console.log("Timer updated successfully");
+    }
+}
+</script>
+
+<script>
+<script>
+// Disable local timer
+window.liveTimerActive = false;
+
+console.log("🔄 Disabling local timer, enabling server sync");
+
+// Simple packet 99 decoder for BroadCast messages
+function decodePacket99(view) {
+    try {
+        var offset = 0;
+        
+        // Skip packet ID (99)
+        offset += 1;
+        
+        // Skip flags (1 byte) 
+        var flags = view.getUint8(offset);
+        offset += 1;
+        
+        // Skip color bytes
+        offset += 3;
+        
+        // Read sender name (skip it)
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+        }
+        
+        // Read message content
+        var message = "";
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+            if (charCode > 0 && charCode < 65536) {
+                message += String.fromCharCode(charCode);
+            }
+        }
+        
+        return message;
+    } catch (e) {
+        console.log("Error decoding packet 99:", e);
+        return null;
+    }
+}
+
+// Enhanced WebSocket override
+(function() {
+    var OriginalWebSocket = window.WebSocket;
+    window.WebSocket = function(url, protocols) {
+        var ws = new OriginalWebSocket(url, protocols);
+        
+        ws.addEventListener('message', function(event) {
+            if (event.data instanceof ArrayBuffer) {
+                var view = new DataView(event.data);
+                var packetId = view.getUint8(0);
+                
+                if (packetId === 99) {
+                    var message = decodePacket99(view);
+                    if (message && message.indexOf("TIME:") === 0) {
+                        console.log("🎯 SERVER TIME MESSAGE:", message);
+                        
+                        var parts = message.split(":");
+                        var phase = parseInt(parts[1]);
+                        var timeLeft = parseInt(parts[2]); 
+                        var roundNum = parseInt(parts[3]);
+                        var winner = parts[4] || "";
+                        
+                        // Update timer display
+                        var timerText = document.getElementById('timerText');
+                        var roundNumber = document.getElementById('roundNumber');
+                        
+                        if (timerText && roundNumber) {
+                            roundNumber.textContent = roundNum;
+                            
+                            if (phase === 0) {
+                                timerText.textContent = "Starting in " + timeLeft + "s";
+                            } else if (phase === 1) {
+                                var m = Math.floor(timeLeft / 60);
+                                var s = timeLeft % 60;
+                                timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+                            } else if (phase === 2) {
+                                timerText.textContent = "Intermission: " + timeLeft + "s";
+                                if (winner) {
+                                    timerText.textContent += " | Winner: " + winner;
+                                }
+                            }
+                            
+                            console.log("✅ Timer synced from server: " + timerText.textContent);
+                        }
+                    }
+                }
+            }
+        });
+        
+        return ws;
+    };
+    
+    // Copy properties
+    Object.setPrototypeOf(window.WebSocket, OriginalWebSocket);
+    window.WebSocket.prototype = OriginalWebSocket.prototype;
+})();
+
+console.log("⚡ Server sync timer activated!");
+</script>
+// Debug all WebSocket packets
+(function() {
+    console.log("🔍 Enhanced WebSocket packet debugger started");
+    
+    var OriginalWebSocket = window.WebSocket;
+    window.WebSocket = function(url, protocols) {
+        console.log("🌐 WebSocket created for:", url);
+        var ws = new OriginalWebSocket(url, protocols);
+        
+        ws.addEventListener('open', function() {
+            console.log("✅ WebSocket connected!");
+        });
+        
+        ws.addEventListener('message', function(event) {
+            console.log("📨 WebSocket message received, type:", typeof event.data, "size:", event.data.byteLength || event.data.length);
+            
+            if (event.data instanceof ArrayBuffer) {
+                var view = new DataView(event.data);
+                var packetId = view.getUint8(0);
+                console.log("📦 Packet ID:", packetId);
+                
+                // Log all packet IDs we see
+                if (!window.seenPackets) window.seenPackets = {};
+                if (!window.seenPackets[packetId]) {
+                    window.seenPackets[packetId] = 0;
+                }
+                window.seenPackets[packetId]++;
+                
+                // Try to decode as chat message (various possible packet IDs)
+                [17, 32, 48, 49, 64, 99, 240].forEach(function(testId) {
+                    if (packetId === testId) {
+                        console.log("🔍 Trying to decode packet", testId, "as potential chat");
+                        tryDecodeMessage(view, testId);
+                    }
+                });
+            }
+            
+            // Also check string data
+            if (typeof event.data === 'string') {
+                console.log("📝 String message:", event.data);
+                if (event.data.indexOf("TIME:") >= 0) {
+                    console.log("⏰ TIME message in string:", event.data);
+                    processTimeMessage(event.data);
+                }
+            }
+        });
+        
+        return ws;
+    };
+    
+    // Copy properties
+    Object.setPrototypeOf(window.WebSocket, OriginalWebSocket);
+    window.WebSocket.prototype = OriginalWebSocket.prototype;
+})();
+
+function tryDecodeMessage(view, packetId) {
+    try {
+        var offset = 0;
+        
+        // Skip packet ID
+        offset += 1;
+        
+        // Different decoding strategies
+        if (packetId === 240) {
+            offset += 4; // Skip some bytes for packet 240
+        }
+        
+        if (packetId === 99 || packetId === 64) {
+            // Chat message format
+            if (offset < view.byteLength) {
+                var flags = view.getUint8(offset);
+                offset += 1;
+                console.log("Chat flags:", flags);
+                
+                if (flags & 2) offset += 4;
+                if (flags & 4) offset += 8; 
+                if (flags & 8) offset += 16;
+            }
+        }
+        
+        // Try to read string
+        var msg = "";
+        var attempts = 0;
+        while (offset < view.byteLength && attempts < 100) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+            if (charCode > 0 && charCode < 65536) {
+                msg += String.fromCharCode(charCode);
+            }
+            attempts++;
+        }
+        
+        console.log("🔤 Decoded message from packet", packetId + ":", JSON.stringify(msg));
+        
+        if (msg && msg.indexOf("TIME:") >= 0) {
+            console.log("⏰ FOUND TIME MESSAGE:", msg);
+            processTimeMessage(msg);
+        }
+        
+    } catch (e) {
+        console.log("❌ Error decoding packet", packetId + ":", e.message);
+    }
+}
+
+// Show packet statistics every 10 seconds
+setInterval(function() {
+    if (window.seenPackets) {
+        console.log("📊 Packet statistics:", window.seenPackets);
+    }
+}, 10000);
+</script>
+
+<script>
+<script>
+// Disable local timer
+window.liveTimerActive = false;
+
+console.log("🔄 Disabling local timer, enabling server sync");
+
+// Simple packet 99 decoder for BroadCast messages
+function decodePacket99(view) {
+    try {
+        var offset = 0;
+        
+        // Skip packet ID (99)
+        offset += 1;
+        
+        // Skip flags (1 byte) 
+        var flags = view.getUint8(offset);
+        offset += 1;
+        
+        // Skip color bytes
+        offset += 3;
+        
+        // Read sender name (skip it)
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+        }
+        
+        // Read message content
+        var message = "";
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+            if (charCode > 0 && charCode < 65536) {
+                message += String.fromCharCode(charCode);
+            }
+        }
+        
+        return message;
+    } catch (e) {
+        console.log("Error decoding packet 99:", e);
+        return null;
+    }
+}
+
+// Enhanced WebSocket override
+(function() {
+    var OriginalWebSocket = window.WebSocket;
+    window.WebSocket = function(url, protocols) {
+        var ws = new OriginalWebSocket(url, protocols);
+        
+        ws.addEventListener('message', function(event) {
+            if (event.data instanceof ArrayBuffer) {
+                var view = new DataView(event.data);
+                var packetId = view.getUint8(0);
+                
+                if (packetId === 99) {
+                    var message = decodePacket99(view);
+                    if (message && message.indexOf("TIME:") === 0) {
+                        console.log("🎯 SERVER TIME MESSAGE:", message);
+                        
+                        var parts = message.split(":");
+                        var phase = parseInt(parts[1]);
+                        var timeLeft = parseInt(parts[2]); 
+                        var roundNum = parseInt(parts[3]);
+                        var winner = parts[4] || "";
+                        
+                        // Update timer display
+                        var timerText = document.getElementById('timerText');
+                        var roundNumber = document.getElementById('roundNumber');
+                        
+                        if (timerText && roundNumber) {
+                            roundNumber.textContent = roundNum;
+                            
+                            if (phase === 0) {
+                                timerText.textContent = "Starting in " + timeLeft + "s";
+                            } else if (phase === 1) {
+                                var m = Math.floor(timeLeft / 60);
+                                var s = timeLeft % 60;
+                                timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+                            } else if (phase === 2) {
+                                timerText.textContent = "Intermission: " + timeLeft + "s";
+                                if (winner) {
+                                    timerText.textContent += " | Winner: " + winner;
+                                }
+                            }
+                            
+                            console.log("✅ Timer synced from server: " + timerText.textContent);
+                        }
+                    }
+                }
+            }
+        });
+        
+        return ws;
+    };
+    
+    // Copy properties
+    Object.setPrototypeOf(window.WebSocket, OriginalWebSocket);
+    window.WebSocket.prototype = OriginalWebSocket.prototype;
+})();
+
+console.log("⚡ Server sync timer activated!");
+</script>
+// LIVE TIMER - Override everything and show real countdown
+console.log("🎯 Starting LIVE TIMER override");
+
+var gameState = {
+    phase: 1,        // 0=countdown, 1=playing, 2=intermission
+    timeLeft: 600,   // 10 minutes
+    roundNum: 1,
+    startTime: Date.now()
+};
+
+// Override any existing timer
+window.liveTimerActive = true;
+
+setInterval(function() {
+    if (!window.liveTimerActive) return;
+    
+    var timerText = document.getElementById('timerText');
+    var roundNumber = document.getElementById('roundNumber');
+    
+    if (timerText && roundNumber) {
+        roundNumber.textContent = gameState.roundNum;
+        
+        switch (gameState.phase) {
+            case 0: // Countdown
+                timerText.textContent = "Starting in " + gameState.timeLeft + "s";
+                break;
+                
+            case 1: // Playing
+                var minutes = Math.floor(gameState.timeLeft / 60);
+                var seconds = gameState.timeLeft % 60;
+                timerText.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+                break;
+                
+            case 2: // Intermission
+                timerText.textContent = "Intermission: " + gameState.timeLeft + "s";
+                break;
+        }
+        
+        // Countdown
+        gameState.timeLeft--;
+        
+        // Phase transitions
+        if (gameState.timeLeft <= 0) {
+            if (gameState.phase === 1) {
+                // Game ended, start intermission
+                gameState.phase = 2;
+                gameState.timeLeft = 30;
+                console.log("🏁 Round " + gameState.roundNum + " ended - Intermission started");
+            } else if (gameState.phase === 2) {
+                // Intermission ended, start new round
+                gameState.phase = 1;
+                gameState.timeLeft = 600; // 10 minutes
+                gameState.roundNum++;
+                console.log("🎮 Round " + gameState.roundNum + " started!");
+            } else if (gameState.phase === 0) {
+                // Countdown ended, start game
+                gameState.phase = 1;
+                gameState.timeLeft = 600;
+                console.log("🚀 Game started!");
+            }
+        }
+        
+        // Log every minute
+        if (gameState.phase === 1 && gameState.timeLeft % 60 === 0) {
+            console.log("⏰ " + Math.floor(gameState.timeLeft / 60) + " minutes left in round " + gameState.roundNum);
+        }
+    }
+}, 1000);
+
+console.log("✅ Live timer activated - showing real 10-minute rounds!");
+</script>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Timer Fix</title>
+</head>
+<body>
+<script>
+// Direct timer override - bypass server data
+var gamePhase = 1; // Game phase: 0=countdown, 1=playing, 2=intermission
+var roundTime = 600; // 10 minutes in seconds
+var roundNumber = 1;
+
+setInterval(function() {
+    var timerText = document.getElementById('timerText');
+    var roundNum = document.getElementById('roundNumber');
+    
+    if (timerText && roundNum) {
+        roundNum.textContent = roundNumber;
+        
+        if (gamePhase === 1) {
+            var minutes = Math.floor(roundTime / 60);
+            var seconds = roundTime % 60;
+            timerText.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+            
+            roundTime--;
+            
+            if (roundTime <= 0) {
+                gamePhase = 2; // Intermission
+                roundTime = 30; // 30 seconds intermission
+            }
+        } else if (gamePhase === 2) {
+            timerText.textContent = "Intermission: " + roundTime + "s";
+            roundTime--;
+            
+            if (roundTime <= 0) {
+                gamePhase = 1; // New round
+                roundTime = 600; // Reset to 10 minutes
+                roundNumber++;
+            }
+        }
+    }
+}, 1000);
+
+console.log("Live timer started - will show actual countdown");
+</script>
+</body>
+</html>

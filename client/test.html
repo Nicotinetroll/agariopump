@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Timer</title>
+</head>
+<body>
+    <h1>Timer Test</h1>
+    <div id="roundTimer" style="position: fixed; top: 10px; left: 10px; background: black; color: white; padding: 10px; font-size: 20px;">
+        ROUND <span id="roundNumber">1</span> - <span id="timerText">LOADING...</span>
+    </div>
+    
+    <script>
+        console.log("Test page loaded!");
+        
+        // Simuluj timer
+        var time = 600;
+        setInterval(function() {
+            var minutes = Math.floor(time / 60);
+            var seconds = time % 60;
+            document.getElementById('timerText').textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+            time--;
+            if (time < 0) time = 600;
+        }, 1000);
+        
+        // WebSocket test
+        try {
+            var ws = new WebSocket('ws://localhost:8080');
+            console.log("WebSocket creating...");
+            
+            ws.onopen = function() {
+                console.log("WebSocket connected!");
+            };
+            
+            ws.onmessage = function(event) {
+                console.log("WebSocket message received:", event.data);
+                
+                if (event.data instanceof ArrayBuffer) {
+                    var view = new DataView(event.data);
+                    var packetId = view.getUint8(0);
+                    console.log("Packet ID:", packetId);
+                }
+            };
+            
+            ws.onerror = function(error) {
+                console.log("WebSocket error:", error);
+            };
+            
+            ws.onclose = function() {
+                console.log("WebSocket disconnected");
+            };
+        } catch (e) {
+            console.log("WebSocket error:", e);
+        }
+    </script>
+</body>
+</html>

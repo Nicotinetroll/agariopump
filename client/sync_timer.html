@@ -1,0 +1,105 @@
+<script>
+// Disable local timer
+window.liveTimerActive = false;
+
+console.log("🔄 Disabling local timer, enabling server sync");
+
+// Simple packet 99 decoder for BroadCast messages
+function decodePacket99(view) {
+    try {
+        var offset = 0;
+        
+        // Skip packet ID (99)
+        offset += 1;
+        
+        // Skip flags (1 byte) 
+        var flags = view.getUint8(offset);
+        offset += 1;
+        
+        // Skip color bytes
+        offset += 3;
+        
+        // Read sender name (skip it)
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+        }
+        
+        // Read message content
+        var message = "";
+        while (offset < view.byteLength) {
+            var charCode = view.getUint16(offset, true);
+            offset += 2;
+            if (charCode === 0) break;
+            if (charCode > 0 && charCode < 65536) {
+                message += String.fromCharCode(charCode);
+            }
+        }
+        
+        return message;
+    } catch (e) {
+        console.log("Error decoding packet 99:", e);
+        return null;
+    }
+}
+
+// Enhanced WebSocket override
+(function() {
+    var OriginalWebSocket = window.WebSocket;
+    window.WebSocket = function(url, protocols) {
+        var ws = new OriginalWebSocket(url, protocols);
+        
+        ws.addEventListener('message', function(event) {
+            if (event.data instanceof ArrayBuffer) {
+                var view = new DataView(event.data);
+                var packetId = view.getUint8(0);
+                
+                if (packetId === 99) {
+                    var message = decodePacket99(view);
+                    if (message && message.indexOf("TIME:") === 0) {
+                        console.log("🎯 SERVER TIME MESSAGE:", message);
+                        
+                        var parts = message.split(":");
+                        var phase = parseInt(parts[1]);
+                        var timeLeft = parseInt(parts[2]); 
+                        var roundNum = parseInt(parts[3]);
+                        var winner = parts[4] || "";
+                        
+                        // Update timer display
+                        var timerText = document.getElementById('timerText');
+                        var roundNumber = document.getElementById('roundNumber');
+                        
+                        if (timerText && roundNumber) {
+                            roundNumber.textContent = roundNum;
+                            
+                            if (phase === 0) {
+                                timerText.textContent = "Starting in " + timeLeft + "s";
+                            } else if (phase === 1) {
+                                var m = Math.floor(timeLeft / 60);
+                                var s = timeLeft % 60;
+                                timerText.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+                            } else if (phase === 2) {
+                                timerText.textContent = "Intermission: " + timeLeft + "s";
+                                if (winner) {
+                                    timerText.textContent += " | Winner: " + winner;
+                                }
+                            }
+                            
+                            console.log("✅ Timer synced from server: " + timerText.textContent);
+                        }
+                    }
+                }
+            }
+        });
+        
+        return ws;
+    };
+    
+    // Copy properties
+    Object.setPrototypeOf(window.WebSocket, OriginalWebSocket);
+    window.WebSocket.prototype = OriginalWebSocket.prototype;
+})();
+
+console.log("⚡ Server sync timer activated!");
+</script>

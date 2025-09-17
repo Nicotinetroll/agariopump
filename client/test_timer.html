@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Timer Test</title>
+</head>
+<body>
+    <h1>Timer Test Page</h1>
+    
+    <!-- Timer Element -->
+    <div id="roundTimer" style="position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 99999; background: red; color: white; padding: 20px; font-size: 30px;">
+        ROUND <span id="roundNumber">1</span> - <span id="timerText">TEST</span>
+    </div>
+
+    <script>
+    // Test if element exists
+    var timer = document.getElementById("timerText");
+    if (timer) {
+        console.log("Timer found!");
+        var count = 60;
+        setInterval(function() {
+            timer.textContent = "Test: " + count--;
+        }, 1000);
+    } else {
+        alert("Timer NOT found!");
+    }
+    </script>
+</body>
+</html>

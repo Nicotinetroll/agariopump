@@ -1,1 +1,1 @@
-{"current_players":0,"alive":0,"spectators":0,"max_players":30,"gamemode":"Free For All","start_time":"2025-09-17T05:17:08.069Z","title":"PlayAgario.fun"}
+{"current_players":181,"alive":0,"spectators":1,"max_players":200,"gamemode":"Free For All","start_time":"2025-09-17T08:46:55.069Z","title":"PlayAgario.fun"}
