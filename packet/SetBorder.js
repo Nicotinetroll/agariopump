@@ -8,7 +8,7 @@ function SetBorder(left, right, top, bottom) {
 module.exports = SetBorder;
 
 SetBorder.prototype.build = function() {
-    var version = "PlayAgario.fun";
+    var version = "Pumpario.fun";
     var buf = new ArrayBuffer(39+2*version.length);
     var view = new DataView(buf);
 

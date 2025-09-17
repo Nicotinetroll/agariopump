@@ -63,7 +63,7 @@ function GameServer() {
         serverPort: 8080,            // Server port
         serverGamemode: 0,            // Gamemode, 0 = FFA, 1 = Teams
         serverResetTime: 0,          // Time in hours to reset (0 is off)
-        serverName: 'PlayAgario.fun',               // The name to display on the tracker (leave empty will show ip:port)
+        serverName: 'Pumpario.fun',               // The name to display on the tracker (leave empty will show ip:port)
         serverAdminPass: '',          // Remote console commands password
         serverBots: 3,                // Amount of player bots to spawn
 		serverVersion: 1,
