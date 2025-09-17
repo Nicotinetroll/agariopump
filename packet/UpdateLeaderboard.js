@@ -64,8 +64,15 @@ UpdateLeaderboard.prototype.build = function() {
                 }
 
                 var item = lb[i];
+                var displayName = item.getName();
+                
+                // Truncate long names for leaderboard display
+                if (displayName && displayName.length > 12) {
+                    displayName = displayName.substr(0, 4) + '...' + displayName.substr(-4);
+                }
+                
                 bufferSize += 4; // Element ID
-                bufferSize += item.getName() ? item.getName().length * 2 : 0; // Name
+                bufferSize += displayName ? displayName.length * 2 : 0; // Name
                 bufferSize += 2; // Name terminator
 
                 validElements++;
@@ -94,9 +101,14 @@ UpdateLeaderboard.prototype.build = function() {
                 view.setUint32(offset, nodeID, true);
                 offset += 4;
 
-                // Set name
+                // Set name (truncated for display)
                 var name = item.getName();
                 if (name) {
+                    // Truncate long names for leaderboard
+                    if (name.length > 12) {
+                        name = name.substr(0, 4) + '...' + name.substr(-4);
+                    }
+                    
                     for (var j = 0; j < name.length; j++) {
                         view.setUint16(offset, name.charCodeAt(j), true);
                         offset += 2;
@@ -128,4 +140,3 @@ UpdateLeaderboard.prototype.build = function() {
             break;
     }
 };
-
