@@ -54,6 +54,7 @@ Commands.list = {
         console.log("\u001B[36mbanlist    \u001B[0m: show current ban list");
         console.log("\u001B[36mboard      \u001B[0m: set scoreboard text");
         console.log("\u001B[36mboardreset \u001B[0m: reset scoreboard text");
+        console.log("\u001B[36mboost      \u001B[0m: give score boost to a player by ID");
         console.log("\u001B[36mchange     \u001B[0m: change specified settings");
         console.log("\u001B[36mclear      \u001B[0m: clear console output");
         console.log("\u001B[36mcolor      \u001B[0m: set cell(s) color by client ID");
@@ -61,10 +62,11 @@ Commands.list = {
         console.log("\u001B[36mfood       \u001B[0m: spawn food at specified Location");
         console.log("\u001B[36mgamemode   \u001B[0m: change server gamemode");
         console.log("\u001B[36mkick       \u001B[0m: kick player or bot by client ID");
+        console.log("\u001B[36mkickbots   \u001B[0m: kick specified number of bots");
         console.log("\u001B[36mkill       \u001B[0m: kill cell(s) by client ID");
         console.log("\u001B[36mkillall    \u001B[0m: kill everyone");
         console.log("\u001B[36mmass       \u001B[0m: set cell(s) mass by client ID");
-				console.log("\u001B[36mmerge	    \u001B[0m: force a player to merge");
+        console.log("\u001B[36mmerge      \u001B[0m: force a player to merge");
         console.log("\u001B[36mname       \u001B[0m: change cell(s) name by client ID");
         console.log("\u001B[36mplayerlist \u001B[0m: get list of players and bots");
         console.log("\u001B[36mpause      \u001B[0m: pause game , freeze all cells");
@@ -75,7 +77,7 @@ Commands.list = {
         console.log("\u001B[36mtp         \u001B[0m: teleport player to specified location");
         console.log("\u001B[36munban      \u001B[0m: un ban a player with IP");
         console.log("\u001B[36mvirus      \u001B[0m: spawn virus at a specified Location");
-				console.log("============================================================");
+        console.log("============================================================");
     },
     addbot: function(gameServer,split) {
         var add = parseInt(split[1]);
@@ -121,38 +123,76 @@ Commands.list = {
             console.log(gameServer.banned[i]);
         }
     },
-    kickbots: function(gameServer, split) {
-    var count = parseInt(split[1]) || 1;
-    var kicked = 0;
-    
-    // Prejdi všetkých klientov odzadu
-    for (var i = gameServer.clients.length - 1; i >= 0 && kicked < count; i--) {
-        var client = gameServer.clients[i];
+    boost: function(gameServer,split) {
+        // Validation checks
+        var id = parseInt(split[1]);
+        var amount = parseInt(split[2]);
         
-        // Skontroluj či je to bot (nemá _socket property)
-        if (client && !('_socket' in client)) {
-            // Odstráň bota
-            var bot = client.playerTracker;
-            if (bot.cells.length > 0) {
-                for (var j = 0; j < bot.cells.length; j++) {
-                    gameServer.removeNode(bot.cells[j]);
-                }
-            }
-            
-            // Odstráň z klientov
-            gameServer.clients.splice(i, 1);
-            kicked++;
+        if (isNaN(id)) {
+            console.log("\u001B[36mServer: \u001B[0mPlease specify a valid player ID!");
+            return;
         }
-    }
-    
-    console.log("\u001B[36mServer: \u001B[0mKicked " + kicked + " bots");
-    
-    // Nastav nový limit
-    if (split[2]) {
-        gameServer.config.serverBots = Math.max(0, gameServer.config.serverBots - kicked);
-        console.log("\u001B[36mServer: \u001B[0mNew bot limit: " + gameServer.config.serverBots);
-    }
-},
+        
+        if (isNaN(amount)) {
+            amount = 200; // Default boost amount
+        }
+        
+        // Find player and give boost
+        for (var i in gameServer.clients) {
+            if (gameServer.clients[i].playerTracker.pID == id) {
+                var client = gameServer.clients[i].playerTracker;
+                
+                // Spawn food directly into player's cells
+                if (client.cells.length > 0) {
+                    // Calculate mass to add to each cell
+                    var massPerCell = amount / client.cells.length;
+                    
+                    for (var j = 0; j < client.cells.length; j++) {
+                        client.cells[j].mass += massPerCell;
+                    }
+                    
+                    console.log("\u001B[36mServer: \u001B[0mGave " + client.name + " a boost of " + amount + " score");
+                } else {
+                    console.log("\u001B[36mServer: \u001B[0mPlayer " + client.name + " has no cells to boost");
+                }
+                return;
+            }
+        }
+        
+        console.log("\u001B[36mServer: \u001B[0mPlayer with ID " + id + " not found");
+    },
+    kickbots: function(gameServer, split) {
+        var count = parseInt(split[1]) || 1;
+        var kicked = 0;
+        
+        // Prejdi všetkých klientov odzadu
+        for (var i = gameServer.clients.length - 1; i >= 0 && kicked < count; i--) {
+            var client = gameServer.clients[i];
+            
+            // Skontroluj či je to bot (nemá _socket property)
+            if (client && !('_socket' in client)) {
+                // Odstráň bota
+                var bot = client.playerTracker;
+                if (bot.cells.length > 0) {
+                    for (var j = 0; j < bot.cells.length; j++) {
+                        gameServer.removeNode(bot.cells[j]);
+                    }
+                }
+                
+                // Odstráň z klientov
+                gameServer.clients.splice(i, 1);
+                kicked++;
+            }
+        }
+        
+        console.log("\u001B[36mServer: \u001B[0mKicked " + kicked + " bots");
+        
+        // Nastav nový limit
+        if (split[2]) {
+            gameServer.config.serverBots = Math.max(0, gameServer.config.serverBots - kicked);
+            console.log("\u001B[36mServer: \u001B[0mNew bot limit: " + gameServer.config.serverBots);
+        }
+    },
     board: function(gameServer,split) {
         var newLB = [];
         for (var i = 1; i < split.length; i++) {
@@ -309,9 +349,9 @@ Commands.list = {
             }
         }
     },
-		merge: function(gameServer,split) {
-				// Validation checks
-				var id = parseInt(split[1]);
+    merge: function(gameServer,split) {
+        // Validation checks
+        var id = parseInt(split[1]);
         if (isNaN(id)) {
             console.log("\u001B[36mServer: \u001B[0mPlease specify a valid player ID!");
             return;
@@ -323,32 +363,32 @@ Commands.list = {
                 for (var j in client.cells) {
                     client.cells[j].calcMergeTime(-10000);
                 }
-		            console.log("\u001B[36mServer: \u001B[0mForced " + client.name + " to merge cells");
-    		        break;
+                console.log("\u001B[36mServer: \u001B[0mForced " + client.name + " to merge cells");
+                break;
             }
         }
     },
     split: function(gameServer,split) {
-				// Validation checks
-				var id = parseInt(split[1]);
-				var count = parseInt(split[2]);
+        // Validation checks
+        var id = parseInt(split[1]);
+        var count = parseInt(split[2]);
         if (isNaN(id)) {
             console.log("\u001B[36mServer: \u001B[0mPlease specify a valid player ID!");
             return;
         }
         if (isNaN(count)) {
-						//Split into 16 cells
-						count = 4;
+            //Split into 16 cells
+            count = 4;
         }
 
         // Split!
         for (var i in gameServer.clients) {
             if (gameServer.clients[i].playerTracker.pID == id) {
                 var client = gameServer.clients[i].playerTracker;
-								//Split
-								for(var i =0;i<count;i++) {
-										gameServer.splitCells(client);
-								}
+                //Split
+                for(var i =0;i<count;i++) {
+                    gameServer.splitCells(client);
+                }
                 console.log("\u001B[36mServer: \u001B[0mForced " + client.name + " to split cells");
                 break;
             }
@@ -523,7 +563,7 @@ Commands.list = {
         console.log("\u001B[36mServer: \u001B[0mSpawned 1 virus at ("+pos.x+" , "+pos.y+")");
     },
     exit: function(gameServer,split) {
-				gameServer.exitserver();
+        gameServer.exitserver();
     },
     say: function(gameServer,split) {
         var  message = "";
