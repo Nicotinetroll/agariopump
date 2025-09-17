@@ -306,21 +306,6 @@ FFA.prototype.updateLB = function(gameServer) {
             }
         }
     }
-    
-    // Strip long names in leaderboard
-    for (var i = 0; i < lb.length; i++) {
-        var player = lb[i];
-        var originalName = player.getName();
-        if (originalName && originalName.length > 10) {
-            // Store original name
-            player._fullName = originalName;
-            // Create shortened version for display
-            player._displayName = originalName.substr(0, 4) + '...' + originalName.substr(-4);
-        } else {
-            player._fullName = originalName;
-            player._displayName = originalName;
-        }
-    }
 
     this.rankOne = lb[0];
     gameServer.leaderboard = lb;

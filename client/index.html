@@ -36,97 +36,6 @@
             max-height: 100vh !important;
         }
         
-        /* Round Timer in center of screen */
-        #gameTimer {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: #FFD700;
-            padding: 12px 35px;
-            border-radius: 30px;
-            font-size: 24px;
-            font-weight: bold;
-            z-index: 999;
-            text-align: center;
-            min-width: 280px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            border: 2px solid #FFD700;
-        }
-        
-        #gameTimer .timer-label {
-            font-size: 13px;
-            color: #FFF;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 3px;
-        }
-        
-        #gameTimer .timer-value {
-            font-size: 36px;
-            color: #FFD700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-            font-weight: bold;
-        }
-        
-        /* Winner banner at top */
-        #winnerBanner {
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: #000;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            z-index: 998;
-            text-align: center;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-            display: none;
-        }
-        
-        #winnerBanner.show {
-            display: block;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.05); }
-        }
-        
-        /* Winner announcement popup */
-        #winnerAnnounce {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 215, 0, 0.95);
-            color: #000;
-            padding: 30px 50px;
-            border-radius: 20px;
-            font-size: 36px;
-            font-weight: bold;
-            z-index: 1000;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            display: none;
-        }
-        
-        #winnerAnnounce.show {
-            display: block;
-            animation: winnerPulse 1s ease-in-out;
-        }
-        
-        @keyframes winnerPulse {
-            0% { transform: translate(-50%, -50%) scale(0); }
-            50% { transform: translate(-50%, -50%) scale(1.1); }
-            100% { transform: translate(-50%, -50%) scale(1); }
-        }
-        
         /* Better colors for UI */
         #helloDialog {
             background: rgba(255, 255, 255, 0.95);
@@ -202,24 +111,6 @@
 </head>
 
 <body>
-    <!-- Game Timer Display -->
-    <div id="gameTimer">
-        <div class="timer-label">TIME LIMIT</div>
-        <div class="timer-value" id="timerValue">1:00</div>
-    </div>
-    
-    <!-- Winner Banner at top -->
-    <div id="winnerBanner">
-        🏆 Last Winner: <span id="lastWinnerName"></span>
-    </div>
-    
-    <!-- Winner Announcement Popup -->
-    <div id="winnerAnnounce">
-        <div>🏆 WINNER 🏆</div>
-        <div id="winnerName" style="font-size: 24px; margin-top: 10px;"></div>
-        <div style="font-size: 18px; margin-top: 10px;">SOL Prize Sent!</div>
-    </div>
-
     <div class="modal fade" id="inPageModal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -255,7 +146,7 @@
                 <div class="form-group">
                     <input id="nick" class="form-control save" data-box-id="0" 
                            placeholder="Use your SOL address as name!" 
-                           maxlength="30" />
+                           maxlength="50" />
                     <br clear="both" />
                 </div>
 
@@ -320,101 +211,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script>
         window.scroll(0, window.document.body.scrollHeight);
-        
-        // Timer synchronized with server
-        var gamePhase = 0; 
-        var timeLeft = 60;
-        var roundNumber = 1;
-        var lastWinner = "";
-        var timerInterval;
-        
-        function updateTimer() {
-            var timer = document.getElementById('gameTimer');
-            var timerValue = document.getElementById('timerValue');
-            var timerLabel = document.querySelector('.timer-label');
-            
-            if (gamePhase === 0) {
-                timerLabel.textContent = 'STARTING IN';
-                timerValue.textContent = timeLeft + 's';
-                timerValue.style.color = '#FFF';
-            } else if (gamePhase === 1) {
-                timerLabel.textContent = 'TIME LIMIT';
-                var minutes = Math.floor(timeLeft / 60);
-                var seconds = timeLeft % 60;
-                timerValue.textContent = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-                
-                // Change color based on time left
-                if (timeLeft <= 10) {
-                    timerValue.style.color = '#FF4444';
-                    timerValue.style.animation = 'pulse 0.5s infinite';
-                } else if (timeLeft <= 30) {
-                    timerValue.style.color = '#FFA500';
-                    timerValue.style.animation = 'none';
-                } else {
-                    timerValue.style.color = '#FFD700';
-                    timerValue.style.animation = 'none';
-                }
-            } else if (gamePhase === 2) {
-                timerLabel.textContent = 'ROUND ENDED';
-                timerValue.textContent = 'Next in ' + timeLeft + 's';
-                timerValue.style.color = '#FFF';
-                timerValue.style.animation = 'none';
-            }
-        }
-        
-        // Listen for chat messages from server
-        if (window.onMessageReceivedOriginal === undefined) {
-            window.onMessageReceivedOriginal = window.onMessageReceived || function() {};
-        }
-        
-        window.onMessageReceived = function(message) {
-            // Check if it's a timer update
-            if (message && typeof message === 'string' && message.indexOf('TIME:') === 0) {
-                var parts = message.split(':');
-                if (parts.length >= 4) {
-                    gamePhase = parseInt(parts[1]);
-                    timeLeft = parseInt(parts[2]);
-                    roundNumber = parseInt(parts[3]);
-                    
-                    if (parts[4]) {
-                        var newWinner = parts.slice(4).join(':');
-                        if (newWinner && newWinner !== lastWinner && gamePhase === 2) {
-                            lastWinner = newWinner;
-                            showWinner(newWinner);
-                            updateWinnerBanner(newWinner);
-                        }
-                    }
-                    
-                    updateTimer();
-                    return; // Don't show timer updates in chat
-                }
-            }
-            
-            // Pass other messages to original handler
-            if (window.onMessageReceivedOriginal) {
-                window.onMessageReceivedOriginal(message);
-            }
-        };
-        
-        // Function to show winner popup
-        function showWinner(name) {
-            var announce = document.getElementById('winnerAnnounce');
-            document.getElementById('winnerName').textContent = name;
-            announce.classList.add('show');
-            setTimeout(function() {
-                announce.classList.remove('show');
-            }, 5000);
-        }
-        
-        // Function to update winner banner
-        function updateWinnerBanner(name) {
-            var banner = document.getElementById('winnerBanner');
-            document.getElementById('lastWinnerName').textContent = name;
-            banner.classList.add('show');
-        }
-        
-        // Update timer display every 100ms for smooth display
-        setInterval(updateTimer, 100);
     </script>
 </body>
 </html>

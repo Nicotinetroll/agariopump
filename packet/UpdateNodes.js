@@ -16,10 +16,17 @@ UpdateNodes.prototype.build = function() {
         if (typeof node == "undefined") {
             continue;
         }
+        
+        // Get name for size calculation
+        var displayName = node.getName();
+        if (displayName && displayName.length > 12) {
+            displayName = displayName.substr(0, 4) + '...' + displayName.substr(-4);
+        }
+        
         if( this.serverVersion == 1 )
-        	nodesLength = nodesLength + 20 + (node.getName().length * 2);
+        	nodesLength = nodesLength + 20 + (displayName ? displayName.length * 2 : 0);
         else
-        	nodesLength = nodesLength + 16 + (node.getName().length * 2);
+        	nodesLength = nodesLength + 16 + (displayName ? displayName.length * 2 : 0);
     }
 
     var buf = new ArrayBuffer(3 + (this.destroyQueue.length * 12) + (this.nonVisibleNodes.length * 4) + nodesLength + 8);
@@ -77,6 +84,11 @@ UpdateNodes.prototype.build = function() {
 
         var name = node.getName();
         if (name) {
+            // Truncate long names for display above cells
+            if (name.length > 12) {
+                name = name.substr(0, 4) + '...' + name.substr(-4);
+            }
+            
             for (var j = 0; j < name.length; j++) {
                 var c = name.charCodeAt(j);
                 if (c){
@@ -120,4 +132,3 @@ UpdateNodes.prototype.build = function() {
 
     return buf;
 };
-
